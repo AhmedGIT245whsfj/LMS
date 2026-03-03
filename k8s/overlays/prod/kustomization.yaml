@@ -1,0 +1,17 @@
+resources:
+  - ../../base
+
+namespace: itverse
+
+images:
+  - name: ahmeduioueu235g/itverse-web
+    newTag: latest
+
+patches:
+  - target:
+      kind: Deployment
+      name: itverse-web
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 3

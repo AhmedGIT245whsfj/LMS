@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: itverse-config
+  namespace: itverse
+data:
+  DB_HOST: "db"
+  DB_NAME: "lms_db"
+  DB_USER: "itverse"
