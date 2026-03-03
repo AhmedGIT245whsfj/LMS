@@ -1,0 +1,2 @@
+nohup: ignoring input
+validating /home/ahmed/Downloads/ITVERSE/docker-compose.yml: volumes.phpmyadmin additional properties 'depends_on', 'environment', 'image', 'ports' not allowed

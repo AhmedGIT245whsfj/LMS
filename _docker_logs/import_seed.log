@@ -1,0 +1,7 @@
+nohup: ignoring input
+[seed] start
+--------------
+DELETE FROM `lesson`
+--------------
+
+ERROR 1146 (42S02) at line 4: Table 'lms_db.lesson' doesn't exist

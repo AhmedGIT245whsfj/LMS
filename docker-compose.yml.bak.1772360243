@@ -1,0 +1,50 @@
+services:
+  db:
+    image: mariadb:11
+    container_name: itverse-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: lms_db
+      MARIADB_USER: itverse
+      MARIADB_PASSWORD: itverse123
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./SQL:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h localhost -proot || exit 1"]
+      interval: 5s
+      retries: 20
+
+  web:
+    build: ./docker/php
+    container_name: itverse-web
+    restart: always
+    ports:
+      - "8090:80"
+    volumes:
+      - ./ELearning:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_USER: itverse
+      DB_PASS: itverse123
+      DB_NAME: lms_db
+    depends_on:
+      - db
+
+volumes:
+  dbdata:
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: itverse
+      PMA_PASSWORD: itverse123
+    ports:
+      - "8091:80"
+    depends_on:
+      - db

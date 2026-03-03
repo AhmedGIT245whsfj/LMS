@@ -1,0 +1,234 @@
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+
+require_once __DIR__ . '/../dbConnection.php';
+include(__DIR__ . '/../mainInclude/header.php');
+
+if (empty($_SESSION['is_login']) || empty($_SESSION['stu_id']) || empty($_SESSION['stuLogEmail'])) {
+  header("Location: /loginorsignup.php");
+  exit;
+}
+
+$stuId = (int)$_SESSION['stu_id'];
+$stuEmail = (string)$_SESSION['stuLogEmail'];
+
+$stmt = $conn->prepare("SELECT c.course_id, c.course_name, c.course_desc, c.course_img, o.order_date
+FROM courseorder o
+JOIN course c ON c.course_id = o.course_id
+WHERE stu_id = ? LIMIT 1");
+$stmt->bind_param("i", $stuId);
+$stmt->execute();
+$res = $stmt->get_result();
+$profile = $res ? $res->fetch_assoc() : null;
+$stmt->close();
+
+if (!$profile) {
+  echo '<div style="margin:120px auto; max-width:900px; padding:16px; font-family:Arial;"><div style="padding:12px; border:1px solid #f5c2c7; background:#f8d7da;">Profile not found.</div></div>';
+  include(__DIR__ . '/../mainInclude/footer_clean.php');
+  exit;
+}
+
+$stuName = (string)$profile['stu_name'];
+$imgPath = (string)$profile['stu_img'];
+$preferredTrack = (string)($profile['preferred_track'] ?? '');
+$experienceLevel = (string)($profile['experience_level'] ?? '');
+
+$ok = isset($_GET['ok']) ? (string)$_GET['ok'] : '';
+$err = isset($_GET['err']) ? (string)$_GET['err'] : '';
+
+$courses = [];
+$q = "
+  SELECT c.course_id, c.course_name, c.course_desc, c.course_img, o.order_date
+  FROM courseorder o JOIN course c ON c.course_id = o.course_id co
+  JOIN course c ON c.course_id = co.course_id
+  WHERE co.stu_email = ?
+  ORDER BY co.co_id DESC
+  LIMIT 50
+";
+$cs = $conn->prepare($q);
+$cs->bind_param("s", $stuEmail);
+$cs->execute();
+$r = $cs->get_result();
+if ($r) {
+  while ($row = $r->fetch_assoc()) $courses[] = $row;
+}
+$cs->close();
+?>
+<style>
+  /* Force navbar visibility only on this page */
+  .navbar { background: #1d3557 !important; }
+  .navbar .nav-link, .navbar .navbar-brand, .navbar .navbar-text { color: #fff !important; }
+  .navbar .nav-link:hover { color: #ffd166 !important; }
+
+  .mp-wrap{max-width:1100px;margin:110px auto 40px auto;padding:0 16px;font-family:Arial, sans-serif;}
+  .mp-alert{padding:12px 14px;border-radius:10px;margin-bottom:14px}
+  .mp-ok{background:#d1e7dd;border:1px solid #badbcc;color:#0f5132}
+  .mp-err{background:#f8d7da;border:1px solid #f5c2c7;color:#842029}
+  .mp-grid{display:grid;grid-template-columns:320px 1fr;gap:18px}
+  .mp-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+  .mp-hero{border-radius:14px 14px 0 0;height:90px;background:linear-gradient(90deg,#1d3557,#457b9d)}
+  .mp-side{overflow:hidden}
+  .mp-side-body{padding:14px}
+  .mp-avatar{width:110px;height:110px;border-radius:999px;object-fit:cover;border:4px solid #fff;margin-top:-55px;background:#fff}
+  .mp-name{font-size:20px;font-weight:700;margin:10px 0 4px}
+  .mp-muted{color:#6b7280;font-size:13px}
+  .mp-badges{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .mp-badge{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid #d1d5db;background:#f3f4f6}
+  .mp-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  .mp-btn{display:inline-block;padding:9px 12px;border-radius:10px;text-decoration:none;border:1px solid #d1d5db;background:#fff;color:#111827;font-size:13px}
+  .mp-btn:hover{background:#f3f4f6}
+  .mp-btn-danger{border-color:#fecaca;color:#991b1b;background:#fff5f5}
+  .mp-nav{margin-top:14px;border-top:1px solid #eee;padding-top:12px;display:flex;flex-direction:column;gap:8px}
+  .mp-nav a{padding:10px 12px;border-radius:10px;text-decoration:none;color:#111827;border:1px solid #e5e7eb;background:#fafafa}
+  .mp-nav a.active{background:#111827;color:#fff;border-color:#111827}
+  .mp-main{padding:18px}
+  .mp-title{font-size:18px;font-weight:700;margin:0 0 12px}
+  .mp-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .mp-field{display:flex;flex-direction:column;gap:6px}
+  .mp-field label{font-size:13px;color:#374151}
+  .mp-field input{padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;font-size:14px}
+  .mp-field input[type="file"]{padding:8px}
+  .mp-help{font-size:12px;color:#6b7280}
+  .mp-form-actions{margin-top:10px}
+  .mp-primary{background:#2563eb;border:1px solid #2563eb;color:#fff}
+  .mp-primary:hover{background:#1d4ed8}
+  .mp-section{display:none}
+  .mp-section.show{display:block}
+  .mp-course-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .mp-course{border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#fff}
+  .mp-course img{width:100%;height:130px;object-fit:cover}
+  .mp-course-body{padding:12px}
+  .mp-course-title{font-weight:700;margin:0 0 6px;font-size:14px}
+  .mp-course-desc{margin:0;color:#6b7280;font-size:13px;line-height:1.35}
+  .mp-course-meta{margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  @media (max-width: 900px){
+    .mp-grid{grid-template-columns:1fr}
+    .mp-form{grid-template-columns:1fr}
+    .mp-course-grid{grid-template-columns:1fr}
+  }
+</style>
+
+<div class="mp-wrap">
+  <?php if ($ok === '1'): ?>
+    <div class="mp-alert mp-ok">Profile updated successfully.</div>
+  <?php endif; ?>
+  <?php if ($err !== ''): ?>
+    <div class="mp-alert mp-err"><?php echo htmlspecialchars($err); ?></div>
+  <?php endif; ?>
+
+  <div class="mp-grid">
+    <div class="mp-card mp-side">
+      <div class="mp-hero"></div>
+      <div class="mp-side-body">
+        <img class="mp-avatar" src="<?php echo htmlspecialchars($imgPath); ?>" alt="Profile">
+        <div class="mp-name"><?php echo htmlspecialchars($stuName); ?></div>
+        <div class="mp-muted"><?php echo htmlspecialchars($stuEmail); ?></div>
+
+        <div class="mp-badges">
+          <?php if ($preferredTrack !== ''): ?><span class="mp-badge"><?php echo htmlspecialchars($preferredTrack); ?></span><?php endif; ?>
+          <?php if ($experienceLevel !== ''): ?><span class="mp-badge"><?php echo htmlspecialchars($experienceLevel); ?></span><?php endif; ?>
+        </div>
+
+        <div class="mp-actions">
+          <a class="mp-btn" href="/index.php">Home</a>
+          <a class="mp-btn mp-btn-danger" href="/Student/studentLogout.php">Logout</a>
+        </div>
+
+        <div class="mp-nav">
+          <a href="#" class="active" data-target="sec-edit" onclick="return mpShow(event)">Edit Profile</a>
+          <a href="#" data-target="sec-courses" onclick="return mpShow(event)">My Courses</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mp-card">
+      <div class="mp-main">
+        <div id="sec-edit" class="mp-section show">
+          <h2 class="mp-title">Edit Profile</h2>
+
+          <form action="/Student/updateprofile.php" method="POST" enctype="multipart/form-data" autocomplete="off">
+            <input type="hidden" name="update_profile" value="1">
+
+            <div class="mp-form">
+              <div class="mp-field">
+                <label for="stu_name">Name</label>
+                <input id="stu_name" name="stu_name" type="text" value="<?php echo htmlspecialchars($stuName); ?>" required>
+              </div>
+
+              <div class="mp-field">
+                <label for="stu_email">Email</label>
+                <input id="stu_email" name="stu_email" type="email" value="<?php echo htmlspecialchars($stuEmail); ?>" required>
+                <div class="mp-help">Changing email updates your login session.</div>
+              </div>
+
+              <div class="mp-field">
+                <label for="stu_pass">New Password</label>
+                <input id="stu_pass" name="stu_pass" type="password" placeholder="Leave empty to keep current password">
+                <div class="mp-help">Use at least 6 characters.</div>
+              </div>
+
+              <div class="mp-field">
+                <label for="stu_img">Profile Image</label>
+                <input id="stu_img" name="stu_img" type="file" accept="image/*">
+                <div class="mp-help">PNG/JPG/WebP up to 2MB.</div>
+              </div>
+            </div>
+
+            <div class="mp-form-actions">
+              <button class="mp-btn mp-primary" type="submit">Save Changes</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="sec-courses" class="mp-section">
+          <h2 class="mp-title">My Courses</h2>
+
+          <?php if (count($courses) === 0): ?>
+            <div class="mp-alert mp-ok" style="background:#eff6ff;border-color:#bfdbfe;color:#1e3a8a;">No courses found yet.</div>
+          <?php else: ?>
+            <div class="mp-course-grid">
+              <?php foreach ($courses as $c): ?>
+                <div class="mp-course">
+                  <img src="<?php echo htmlspecialchars((string)$c['course_img']); ?>" alt="Course">
+                  <div class="mp-course-body">
+                    <div class="mp-course-title"><?php echo htmlspecialchars((string)$c['course_name']); ?></div>
+                    <p class="mp-course-desc">
+                      <?php
+                        $desc = (string)$c['course_desc'];
+                        echo htmlspecialchars(mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '...' : $desc);
+                      ?>
+                    </p>
+                    <div class="mp-course-meta">
+                      <span class="mp-muted"><?php echo htmlspecialchars((string)($c['order_date'] ?? '')); ?></span>
+                      <a class="mp-btn" href="/Student/watchcourse.php?course_id=<?php echo (int)$c['course_id']; ?>">Open</a>
+                    </div>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          <?php endif; ?>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function mpShow(e){
+  e.preventDefault();
+  var a = e.currentTarget;
+  var target = a.getAttribute('data-target');
+
+  document.querySelectorAll('.mp-nav a').forEach(function(x){ x.classList.remove('active'); });
+  a.classList.add('active');
+
+  document.querySelectorAll('.mp-section').forEach(function(sec){ sec.classList.remove('show'); });
+  var el = document.getElementById(target);
+  if (el) el.classList.add('show');
+
+  return false;
+}
+</script>
+
+<?php include(__DIR__ . '/../mainInclude/footer_clean.php'); ?>

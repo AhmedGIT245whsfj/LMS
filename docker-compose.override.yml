@@ -1,0 +1,12 @@
+services:
+  phpmyadmin:
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: itverse
+      PMA_PASSWORD: itverse123
+    ports:
+      - "8091:80"
+    depends_on:
+      - db

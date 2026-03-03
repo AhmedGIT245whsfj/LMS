@@ -1,0 +1,91 @@
+track_name,course_name,course_desc,course_author,course_duration,course_price,course_original_price,course_img
+AI,AIFundamentals,AIFundamentals (ITVERSE),ITVERSE,2h,499,999,AIFundamentals.png
+AWS Cloud,Amazon EC2 Deep Dive & Compute Architecture,Amazon EC2 Deep Dive & Compute Architecture (ITVERSE),ITVERSE,2h,499,999,Amazon EC2 Deep Dive & Compute Architecture.png
+AWS Cloud,AWS Cloud Fundamentals & Core Services,AWS Cloud Fundamentals & Core Services (ITVERSE),ITVERSE,2h,499,999,AWS Cloud Fundamentals & Core Services.jpg
+AWS Cloud,"AWS Databases: RDS, DynamoDB & Aurora","AWS Databases: RDS, DynamoDB & Aurora (ITVERSE)",ITVERSE,2h,499,999,"AWS Databases: RDS, DynamoDB & Aurora.webp"
+AWS Cloud,"AWS Networking: VPC, Subnets & Security Groups","AWS Networking: VPC, Subnets & Security Groups (ITVERSE)",ITVERSE,2h,499,999,"AWS Networking: VPC, Subnets & Security Groups.png"
+AWS Cloud,"AWS Storage Solutions: S3, EBS & Glacier","AWS Storage Solutions: S3, EBS & Glacier (ITVERSE)",ITVERSE,2h,499,999,"AWS Storage Solutions: S3, EBS & Glacier.png"
+Programming,Build a Full Stack Mini Project,Build a Full Stack Mini Project (ITVERSE),ITVERSE,2h,499,999,Build a Full-Stack Mini Project.jpeg
+Programming,C# and .NET Basics,C# and .NET Basics (ITVERSE),ITVERSE,2h,499,999,C# and .NET Basics.jpeg
+DevOps,CD Foundations,CD Foundations (ITVERSE),ITVERSE,2h,499,999,CD Foundations.avif
+DevOps,CD Foundations,CD Foundations (ITVERSE),ITVERSE,2h,499,999,CD Foundations.avif
+DevOps,GitHub Actions,GitHub Actions (ITVERSE),ITVERSE,2h,499,999,GitHub Actions.png
+DevOps,Cisco CCNA Foundations,Cisco CCNA Foundations (ITVERSE),ITVERSE,2h,499,999,Cisco CCNA Foundations.webp
+Programming,Command Line Mastery,Command Line Mastery (ITVERSE),ITVERSE,2h,499,999,Command Line Mastery.png
+AI,Computer Vision Basics,Computer Vision Basics (ITVERSE),ITVERSE,2h,499,999,Computer Vision Basics.jpeg
+Data Science,Data Cleaning and Wrangling,Data Cleaning and Wrangling (ITVERSE),ITVERSE,2h,499,999,Data Cleaning and Wrangling.webp
+DevOps,Data Science Capstone Project,Data Science Capstone Project (ITVERSE),ITVERSE,2h,499,999,Data Science Capstone Project.jpeg
+DevOps,Data Science Fundamentals,Data Science Fundamentals (ITVERSE),ITVERSE,2h,499,999,Data Science Fundamentals.webp
+Data Science,Data Structures and Algorithms,Data Structures and Algorithms (ITVERSE),ITVERSE,2h,499,999,Data Structures and Algorithms.png
+Data Science,Data Visualization Basics,Data Visualization Basics (ITVERSE),ITVERSE,2h,499,999,Data Visualization Basics.png
+Data Science,Database Fundamentals (SQL),Database Fundamentals (SQL) (ITVERSE),ITVERSE,2h,499,999,Database Fundamentals (SQL).png
+AI,Deep Learning Foundations,Deep Learning Foundations (ITVERSE),ITVERSE,2h,499,999,Deep Learning Foundations.jpeg
+DevOps,DevOps Fundamentals,DevOps Fundamentals (ITVERSE),ITVERSE,2h,499,999,DevOps Fundamentals.jpeg
+Cyber Security,Digital Forensics Basics,Digital Forensics Basics (ITVERSE),ITVERSE,2h,499,999,Digital Forensics Basics.jpeg
+DevOps,DockerCompose,DockerCompose (ITVERSE),ITVERSE,2h,499,999,DockerCompose.webp
+DevOps,DockerEssentials,DockerEssentials (ITVERSE),ITVERSE,2h,499,999,DockerEssentials.webp
+Data Science,Exploratory Data Analysis,Exploratory Data Analysis (ITVERSE),ITVERSE,2h,499,999,Exploratory Data Analysis.webp
+Data Science,Feature Engineering Basics,Feature Engineering Basics (ITVERSE),ITVERSE,2h,499,999,Feature Engineering Basics.png
+Programming,File system workflow,File system workflow (ITVERSE),ITVERSE,2h,499,999,File-system-workflow.png
+Programming,Git and GitHub Workflow,Git and GitHub Workflow (ITVERSE),ITVERSE,2h,499,999,Git and GitHub Workflow.png
+DevOps,GitforDevOps,GitforDevOps (ITVERSE),ITVERSE,2h,499,999,GitforDevOps.png
+DevOps,GitHub Actions,GitHub Actions (ITVERSE),ITVERSE,2h,499,999,GitHub Actions.png
+DevOps,Grafana),Grafana) (ITVERSE),ITVERSE,2h,499,999,Grafana).png
+AI,High Availability & Auto Scaling Architectures,High Availability & Auto Scaling Architectures (ITVERSE),ITVERSE,2h,499,999,High Availability & Auto Scaling Architectures.png
+Programming,Identity & Access Management (IAM) Mastery,Identity & Access Management (IAM) Mastery (ITVERSE),ITVERSE,2h,499,999,Identity & Access Management (IAM) Mastery.png
+Programming,Infrastructure as Code Basics,Infrastructure as Code Basics (ITVERSE),ITVERSE,2h,499,999,Infrastructure as Code Basics.webp
+DevOps,Infrastructure as Code with CloudFormation & Terraform,Infrastructure as Code with CloudFormation & Terraform (ITVERSE),ITVERSE,2h,499,999,Infrastructure as Code with CloudFormation & Terraform.png
+Programming,IP Deep Dive,IP Deep Dive (ITVERSE),ITVERSE,2h,499,999,IP Deep Dive.jpeg
+Programming,Java Fundamentals,Java Fundamentals (ITVERSE),ITVERSE,2h,499,999,Java Fundamentals.jpeg
+Programming,JavaScript Essentials,JavaScript Essentials (ITVERSE),ITVERSE,2h,499,999,JavaScript Essentials.jpeg
+DevOps,Kubernetes Foundations,Kubernetes Foundations (ITVERSE),ITVERSE,2h,499,999,Kubernetes Foundations.jpeg
+DevOps,Linux for DevOps,Linux for DevOps (ITVERSE),ITVERSE,2h,499,999,Linux for DevOps.avif
+Cyber Security,Linux for Security,Linux for Security (ITVERSE),ITVERSE,2h,499,999,Linux for Security.jpeg
+Operating Systems,Linux OS Essentials,Linux OS Essentials (ITVERSE),ITVERSE,2h,499,999,Linux OS Essentials.png
+DevOps,Machine Learning for Data Science,Machine Learning for Data Science (ITVERSE),ITVERSE,2h,499,999,Machine Learning for Data Science.jpg
+AI,Machine Learning Foundations,Machine Learning Foundations (ITVERSE),ITVERSE,2h,499,999,Machine Learning Foundations.jpg
+Programming,Math for Machine Learning,Math for Machine Learning (ITVERSE),ITVERSE,2h,499,999,Math for Machine Learning.jpg
+Operating Systems,Memory Management,Memory Management (ITVERSE),ITVERSE,2h,499,999,Memory Management.jpg
+AWS Cloud,Monitoring & Logging with CloudWatch & AWS X Ray,Monitoring & Logging with CloudWatch & AWS X Ray (ITVERSE),ITVERSE,2h,499,999,Monitoring & Logging with CloudWatch & AWS X-Ray.jpg
+DevOps,Data Science Fundamentals,Data Science Fundamentals (ITVERSE),ITVERSE,2h,499,999,Data Science Fundamentals.webp
+Data Science,Data Visualization Basics,Data Visualization Basics (ITVERSE),ITVERSE,2h,499,999,Data Visualization Basics.png
+DevOps,Grafana),Grafana) (ITVERSE),ITVERSE,2h,499,999,Grafana).png
+Programming,Infrastructure as Code Basics,Infrastructure as Code Basics (ITVERSE),ITVERSE,2h,499,999,Infrastructure as Code Basics.webp
+Data Science,Python for Data Analysis,Python for Data Analysis (ITVERSE),ITVERSE,2h,499,999,Python for Data Analysis.jpg
+DevOps,Statistics for Data Science,Statistics for Data Science (ITVERSE),ITVERSE,2h,499,999,Statistics for Data Science.png
+DevOps,Network Monitoring Basics,Network Monitoring Basics (ITVERSE),ITVERSE,2h,499,999,Network Monitoring Basics.jpeg
+Cyber Security,Network Security,Network Security (ITVERSE),ITVERSE,2h,499,999,Network Security.jpeg
+Networking,Network Services (DNS⁄DHCP⁄NTP),Network Services (DNS⁄DHCP⁄NTP) (ITVERSE),ITVERSE,2h,499,999,Network Services (DNS⁄DHCP⁄NTP).webp
+Networking,Network Troubleshooting,Network Troubleshooting (ITVERSE),ITVERSE,2h,499,999,Network Troubleshooting.avif
+Networking,Networking Fundamentals,Networking Fundamentals (ITVERSE),ITVERSE,2h,499,999,Networking Fundamentals.jpg
+Networking,NetworkTroubleshooting,NetworkTroubleshooting (ITVERSE),ITVERSE,2h,499,999,NetworkTroubleshooting.avif
+Networking,Neural Networks Basics,Neural Networks Basics (ITVERSE),ITVERSE,2h,499,999,Neural Networks Basics.avif
+AI,NLP Essentials,NLP Essentials (ITVERSE),ITVERSE,2h,499,999,NLP Essentials.jpeg
+Networking,NTP),NTP) (ITVERSE),ITVERSE,2h,499,999,NTP).jpeg
+Programming,Object Oriented Programming,Object Oriented Programming (ITVERSE),ITVERSE,2h,499,999,Object-Oriented Programming.png
+Operating Systems,OS Fundamentals,OS Fundamentals (ITVERSE),ITVERSE,2h,499,999,OS Fundamentals.jpg
+Operating Systems,OS Troubleshooting,OS Troubleshooting (ITVERSE),ITVERSE,2h,499,999,OS Troubleshooting.png
+Cyber Security,owasp top ten updates main,owasp top ten updates main (ITVERSE),ITVERSE,2h,499,999,owasp-top-ten-updates-main.png
+Cyber Security,Penetration Testing Basics,Penetration Testing Basics (ITVERSE),ITVERSE,2h,499,999,Penetration Testing Basics.png
+DevOps,Performance and Monitoring,Performance and Monitoring (ITVERSE),ITVERSE,2h,499,999,Performance and Monitoring.jpeg
+Cyber Security,Permissions and Security Basics,Permissions and Security Basics (ITVERSE),ITVERSE,2h,499,999,Permissions and Security Basics.webp
+Programming,PHP Web Development,PHP Web Development (ITVERSE),ITVERSE,2h,499,999,PHP Web Development.webp
+Operating Systems,Processes and Threads,Processes and Threads (ITVERSE),ITVERSE,2h,499,999,Processes and Threads.jpg
+AI,Python for AI,Python for AI (ITVERSE),ITVERSE,2h,499,999,Python for AI.jpg
+Data Science,Python for Data Analysis,Python for Data Analysis (ITVERSE),ITVERSE,2h,499,999,Python for Data Analysis.jpg
+Programming,PythonFoundations,PythonFoundations (ITVERSE),ITVERSE,2h,499,999,PythonFoundations.png
+Networking,Routing Basics (Static & Dynamic),Routing Basics (Static & Dynamic) (ITVERSE),ITVERSE,2h,499,999,Routing Basics (Static & Dynamic).webp
+Cyber Security,Security Fundamentals,Security Fundamentals (ITVERSE),ITVERSE,2h,499,999,Security Fundamentals.png
+Cyber Security,Security Tools Essentials,Security Tools Essentials (ITVERSE),ITVERSE,2h,499,999,Security Tools Essentials.jpeg
+AWS Cloud,"Serverless on AWS: Lambda, API Gateway & EventBridge","Serverless on AWS: Lambda, API Gateway & EventBridge (ITVERSE)",ITVERSE,2h,499,999,"Serverless on AWS: Lambda, API Gateway & EventBridge.webp"
+Cyber Security,SOC & Incident Response,SOC & Incident Response (ITVERSE),ITVERSE,2h,499,999,SOC & Incident Response.webp
+DevOps,Statistics for Data Science,Statistics for Data Science (ITVERSE),ITVERSE,2h,499,999,Statistics for Data Science.png
+AWS Cloud,Subnetting Mastery,Subnetting Mastery (ITVERSE),ITVERSE,2h,499,999,Subnetting Mastery.png
+Programming,Supervised Learning,Supervised Learning (ITVERSE),ITVERSE,2h,499,999,Supervised Learning.png
+Programming,switc,switc (ITVERSE),ITVERSE,2h,499,999,switc.jpeg
+Networking,tcp,tcp (ITVERSE),ITVERSE,2h,499,999,tcp.webp
+Programming,Unsupervised Learning,Unsupervised Learning (ITVERSE),ITVERSE,2h,499,999,Unsupervised Learning.jpg
+Cyber Security,Vulnerability Assessment,Vulnerability Assessment (ITVERSE),ITVERSE,2h,499,999,Vulnerability Assessment.png
+Cyber Security,Web Security Basics,Web Security Basics (ITVERSE),ITVERSE,2h,499,999,Web Security Basics.webp
+Operating Systems,Windows OS Essentials,Windows OS Essentials (ITVERSE),ITVERSE,2h,499,999,Windows OS Essentials.jpg
+Networking,wireless,wireless (ITVERSE),ITVERSE,2h,499,999,wireless.png
