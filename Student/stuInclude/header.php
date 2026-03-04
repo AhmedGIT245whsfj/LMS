@@ -28,9 +28,7 @@ if (!isset($pageTitle) || !is_string($pageTitle) || $pageTitle === '') {
 if (!defined('ITVERSE_PAGE_TITLE')) { define('ITVERSE_PAGE_TITLE', $pageTitle); }
 
 include_once('../dbConnection.php');
- if(!isset($_SESSION)){ 
-   session_start(); 
- } 
+
  if(isset($_SESSION['is_login'])){
   $stuLogEmail = $_SESSION['stuLogEmail'];
  } 

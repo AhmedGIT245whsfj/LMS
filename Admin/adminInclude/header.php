@@ -1,3 +1,7 @@
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+if (!defined('PAGE')) { define('PAGE', ''); }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
