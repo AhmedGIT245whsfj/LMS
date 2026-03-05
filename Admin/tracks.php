@@ -1,7 +1,7 @@
 <?php
 if (!isset($_SESSION)) { session_start(); }
 define('TITLE', 'Tracks');
-define('PAGE', 'tracks');
+define('PAGE', 'track');
 
 include('../dbConnection.php');
 include('./adminInclude/header.php');
@@ -14,7 +14,7 @@ if (!isset($_SESSION['is_admin_login'])) {
 if (isset($_POST['delete']) && isset($_POST['id'])) {
   $id = (int)$_POST['id'];
   if ($id > 0) {
-    $stmt0 = $conn->prepare("SELECT track_img FROM tracks WHERE track_id = ? LIMIT 1");
+    $stmt0 = $conn->prepare("SELECT track_img FROM track WHERE track_id = ? LIMIT 1");
     $oldImg = null;
     if ($stmt0) {
       $stmt0->bind_param("i", $id);
@@ -25,7 +25,7 @@ if (isset($_POST['delete']) && isset($_POST['id'])) {
       $stmt0->close();
     }
 
-    $stmt = $conn->prepare("DELETE FROM tracks WHERE track_id = ? LIMIT 1");
+    $stmt = $conn->prepare("DELETE FROM track WHERE track_id = ? LIMIT 1");
     if ($stmt) {
       $stmt->bind_param("i", $id);
       $stmt->execute();
@@ -51,7 +51,7 @@ if (isset($_POST['delete']) && isset($_POST['id'])) {
   }
 }
 
-$result = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM tracks ORDER BY track_id ASC");
+$result = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM track ORDER BY track_id ASC");
 ?>
 <div class="col-sm-9 mt-5">
   <p class="bg-dark text-white p-2">List of Tracks</p>
@@ -99,7 +99,7 @@ $result = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM 
       </tbody>
     </table>
   <?php else: ?>
-    <div class="alert alert-dark">No tracks found.</div>
+    <div class="alert alert-dark">No track found.</div>
   <?php endif; ?>
 </div>
 

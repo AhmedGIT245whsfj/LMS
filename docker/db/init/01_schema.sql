@@ -4,7 +4,7 @@ START TRANSACTION;
 CREATE DATABASE IF NOT EXISTS lms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE lms_db;
 
-CREATE TABLE IF NOT EXISTS tracks (
+CREATE TABLE IF NOT EXISTS track (
   track_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   track_name VARCHAR(191) NOT NULL,
   track_desc TEXT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS tracks (
 
 DROP VIEW IF EXISTS track;
 CREATE OR REPLACE VIEW track AS
-  SELECT track_id, track_name, track_desc, track_img FROM tracks;
+  SELECT track_id, track_name, track_desc, track_img FROM track;
 
 CREATE TABLE IF NOT EXISTS course (
   course_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS course (
   PRIMARY KEY (course_id),
   KEY idx_course_track (track_id),
   CONSTRAINT fk_course_tracks
-    FOREIGN KEY (track_id) REFERENCES tracks(track_id)
+    FOREIGN KEY (track_id) REFERENCES track(track_id)
     ON UPDATE CASCADE
     ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

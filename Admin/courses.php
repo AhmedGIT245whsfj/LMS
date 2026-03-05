@@ -37,7 +37,7 @@ if (isset($_POST['delete']) && isset($_POST['id'])) {
 $sql = "
   SELECT c.course_id, c.course_name, c.course_author, c.track_id, t.track_name
   FROM course c
-  LEFT JOIN tracks t ON t.track_id = c.track_id
+  LEFT JOIN track t ON t.track_id = c.track_id
   ORDER BY c.course_id ASC
 ";
 $result = $conn->query($sql);

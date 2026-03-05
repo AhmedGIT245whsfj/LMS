@@ -1,7 +1,7 @@
 <?php
 if (!isset($_SESSION)) { session_start(); }
 define('TITLE', 'Edit Track');
-define('PAGE', 'tracks');
+define('PAGE', 'track');
 
 include('../dbConnection.php');
 include('./adminInclude/header.php');
@@ -76,7 +76,7 @@ function delete_track_image_if_local(?string $path): void {
 
 if (isset($_POST['view']) && isset($_POST['id'])) {
   $id = (int)$_POST['id'];
-  $stmt = $conn->prepare("SELECT track_id, track_name, track_desc, track_img FROM tracks WHERE track_id = ? LIMIT 1");
+  $stmt = $conn->prepare("SELECT track_id, track_name, track_desc, track_img FROM track WHERE track_id = ? LIMIT 1");
   if ($stmt) {
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -95,7 +95,7 @@ if (isset($_POST['requpdate'])) {
     $msg = '<div class="alert alert-warning col-sm-8 mt-2" role="alert">Fill all fields</div>';
   } else {
     $currentImg = null;
-    $stmt0 = $conn->prepare("SELECT track_img FROM tracks WHERE track_id = ? LIMIT 1");
+    $stmt0 = $conn->prepare("SELECT track_img FROM track WHERE track_id = ? LIMIT 1");
     if ($stmt0) {
       $stmt0->bind_param("i", $id);
       $stmt0->execute();
@@ -111,7 +111,7 @@ if (isset($_POST['requpdate'])) {
       $msg = '<div class="alert alert-warning col-sm-8 mt-2" role="alert">'.htmlspecialchars($imgErr).'</div>';
     } else {
       if ($newImg !== null) {
-        $stmt = $conn->prepare("UPDATE tracks SET track_name = ?, track_desc = ?, track_img = ? WHERE track_id = ? LIMIT 1");
+        $stmt = $conn->prepare("UPDATE track SET track_name = ?, track_desc = ?, track_img = ? WHERE track_id = ? LIMIT 1");
         if ($stmt) {
           $stmt->bind_param("sssi", $name, $desc, $newImg, $id);
           if ($stmt->execute()) {
@@ -125,7 +125,7 @@ if (isset($_POST['requpdate'])) {
           $msg = '<div class="alert alert-danger col-sm-8 mt-2" role="alert">Unable to update</div>';
         }
       } else {
-        $stmt = $conn->prepare("UPDATE tracks SET track_name = ?, track_desc = ? WHERE track_id = ? LIMIT 1");
+        $stmt = $conn->prepare("UPDATE track SET track_name = ?, track_desc = ? WHERE track_id = ? LIMIT 1");
         if ($stmt) {
           $stmt->bind_param("ssi", $name, $desc, $id);
           if ($stmt->execute()) {
@@ -140,7 +140,7 @@ if (isset($_POST['requpdate'])) {
       }
     }
 
-    $stmt2 = $conn->prepare("SELECT track_id, track_name, track_desc, track_img FROM tracks WHERE track_id = ? LIMIT 1");
+    $stmt2 = $conn->prepare("SELECT track_id, track_name, track_desc, track_img FROM track WHERE track_id = ? LIMIT 1");
     if ($stmt2) {
       $stmt2->bind_param("i", $id);
       $stmt2->execute();
@@ -195,7 +195,7 @@ $img = (string)($row['track_img'] ?? '');
 
     <div class="text-center">
       <button type="submit" class="btn btn-danger" id="requpdate" name="requpdate">Update</button>
-      <a href="tracks.php" class="btn btn-secondary">Close</a>
+      <a href="track.php" class="btn btn-secondary">Close</a>
     </div>
 
     <?php if ($msg) { echo $msg; } ?>

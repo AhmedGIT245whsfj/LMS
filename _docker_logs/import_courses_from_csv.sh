@@ -54,11 +54,11 @@ for i, row in enumerate(rows, start=1):
     course_original_price = row.get("course_original_price","0").strip() or "0"
     course_img = esc(row.get("course_img","").strip())
 
-    # track_id comes from tracks table (your DB uses tracks)
+    # track_id comes from track table (your DB uses track)
     # If track name doesn't exist, it will insert NULL -> you will see it in sanity check.
     lines.append(
         "INSERT INTO course (track_id, course_name, course_desc, course_author, course_img, course_duration, course_price, course_original_price) "
-        f"VALUES ((SELECT track_id FROM tracks WHERE track_name='{track_name}' LIMIT 1), "
+        f"VALUES ((SELECT track_id FROM track WHERE track_name='{track_name}' LIMIT 1), "
         f"'{course_name}','{course_desc}','{course_author}','{course_img}','{course_duration}',{course_price},{course_original_price});"
     )
 
@@ -76,9 +76,9 @@ echo
 echo "== Sanity checks =="
 $DC exec -T db mariadb -uroot -proot -e "
 USE lms_db;
-SELECT COUNT(*) AS tracks FROM tracks;
+SELECT COUNT(*) AS track FROM track;
 SELECT COUNT(*) AS courses FROM course;
-SELECT track_id, track_name FROM tracks ORDER BY track_id;
+SELECT track_id, track_name FROM track ORDER BY track_id;
 SELECT course_id, track_id, course_name, course_img FROM course ORDER BY course_id LIMIT 20;
 " || true
 

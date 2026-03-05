@@ -1,7 +1,7 @@
 <?php
 if (!isset($_SESSION)) { session_start(); }
 define('TITLE', 'Add Track');
-define('PAGE', 'tracks');
+define('PAGE', 'track');
 
 include('../dbConnection.php');
 include('./adminInclude/header.php');
@@ -76,7 +76,7 @@ if (isset($_POST['trackSubmitBtn'])) {
     if ($imgErr !== '') {
       $msg = '<div class="alert alert-warning col-sm-8 mt-2" role="alert">'.htmlspecialchars($imgErr).'</div>';
     } else {
-      $stmt = $conn->prepare("INSERT INTO tracks (track_name, track_desc, track_img) VALUES (?, ?, ?)");
+      $stmt = $conn->prepare("INSERT INTO track (track_name, track_desc, track_img) VALUES (?, ?, ?)");
       if ($stmt) {
         $stmt->bind_param("sss", $name, $desc, $imgPath);
         if ($stmt->execute()) {
@@ -113,7 +113,7 @@ if (isset($_POST['trackSubmitBtn'])) {
 
     <div class="text-center">
       <button type="submit" class="btn btn-danger" id="trackSubmitBtn" name="trackSubmitBtn">Submit</button>
-      <a href="tracks.php" class="btn btn-secondary">Close</a>
+      <a href="track.php" class="btn btn-secondary">Close</a>
     </div>
     <?php if ($msg) { echo $msg; } ?>
   </form>

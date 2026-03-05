@@ -14,10 +14,10 @@ if (!isset($_SESSION['is_admin_login'])) {
 $msg = null;
 $row = null;
 
-$tracks = [];
-$tr = $conn->query("SELECT track_id, track_name FROM tracks ORDER BY track_id ASC");
+$track = [];
+$tr = $conn->query("SELECT track_id, track_name FROM track ORDER BY track_id ASC");
 if ($tr) {
-  while ($r = $tr->fetch_assoc()) { $tracks[] = $r; }
+  while ($r = $tr->fetch_assoc()) { $track[] = $r; }
 }
 
 if (isset($_POST['view']) && isset($_POST['id'])) {
@@ -108,7 +108,7 @@ if (!$row) {
       <label for="track_id">Track</label>
       <select class="form-control" id="track_id" name="track_id" required>
         <option value="">Select track</option>
-        <?php foreach ($tracks as $t): ?>
+        <?php foreach ($track as $t): ?>
           <option value="<?php echo (int)$t['track_id']; ?>" <?php if ((int)$row['track_id'] === (int)$t['track_id']) echo 'selected'; ?>>
             <?php echo htmlspecialchars($t['track_name']); ?>
           </option>

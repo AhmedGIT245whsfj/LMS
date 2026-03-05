@@ -7,18 +7,18 @@ if (isset($_GET['track_id']) && $_GET['track_id'] !== '') {
   $trackId = (int)$_GET['track_id'];
 }
 
-$tracks = [];
-$resTracks = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM tracks ORDER BY track_id ASC");
+$track = [];
+$resTracks = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM track ORDER BY track_id ASC");
 if ($resTracks && $resTracks->num_rows > 0) {
   while ($r = $resTracks->fetch_assoc()) {
-    $tracks[] = $r;
+    $track[] = $r;
   }
 }
 
 $track = null;
 $courses = [];
 if ($trackId > 0) {
-  $stmtT = $conn->prepare("SELECT track_id, track_name, track_desc, track_img FROM tracks WHERE track_id = ? LIMIT 1");
+  $stmtT = $conn->prepare("SELECT track_id, track_name, track_desc, track_img FROM track WHERE track_id = ? LIMIT 1");
   if ($stmtT) {
     $stmtT->bind_param("i", $trackId);
     $stmtT->execute();
@@ -98,8 +98,8 @@ if ($trackId > 0) {
     <p class="text-center text-muted mb-4">Choose a track to view its courses</p>
 
     <div class="row mt-4">
-      <?php if (count($tracks) > 0): ?>
-        <?php foreach ($tracks as $t): ?>
+      <?php if (count($track) > 0): ?>
+        <?php foreach ($track as $t): ?>
           <div class="col-sm-6 col-lg-3 mb-4">
             <a href="courses.php?track_id=<?php echo (int)$t['track_id']; ?>" class="btn" style="text-align:left; padding:0px; width:100%;">
               <div class="card h-100">
@@ -126,7 +126,7 @@ if (isset($t['track_img'])) { $timg = trim((string)$t['track_img']); }
         <?php endforeach; ?>
       <?php else: ?>
         <div class="col-12">
-          <div class="alert alert-dark">No tracks found.</div>
+          <div class="alert alert-dark">No track found.</div>
         </div>
       <?php endif; ?>
     </div>

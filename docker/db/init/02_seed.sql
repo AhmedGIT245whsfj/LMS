@@ -1,7 +1,7 @@
 START TRANSACTION;
 USE lms_db;
 
-INSERT INTO tracks (track_id, track_name, track_desc, track_img)
+INSERT INTO track (track_id, track_name, track_desc, track_img)
 SELECT * FROM (
   SELECT 1, 'Programming', 'Programming Track', 'image/TRACKIMAGES/programming.webp' UNION ALL
   SELECT 2, 'Data Science', 'Data Science Track', 'image/TRACKIMAGES/Data Science.jpeg' UNION ALL
@@ -12,7 +12,7 @@ SELECT * FROM (
   SELECT 7, 'Networking', 'Networking Track', 'image/TRACKIMAGES/networking.jpeg' UNION ALL
   SELECT 8, 'Operating Systems', 'Operating Systems Track', 'image/TRACKIMAGES/operating.jpg'
 ) AS src
-WHERE NOT EXISTS (SELECT 1 FROM tracks);
+WHERE NOT EXISTS (SELECT 1 FROM track);
 
 COMMIT;
 
