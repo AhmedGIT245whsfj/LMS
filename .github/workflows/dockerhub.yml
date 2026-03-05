@@ -50,6 +50,30 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Deploy to EKS (set image by sha tag)
+        if: github.ref == 'refs/heads/main'
+        env:
+          AWS_REGION: us-east-1
+          CLUSTER_NAME: itverse-eks
+          NAMESPACE: itverse
+          DEPLOYMENT: itverse-web
+          CONTAINER: web
+          IMAGE_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+        run: |
+          set -e
+          SHORT_SHA="${GITHUB_SHA::7}"
+          IMAGE="${IMAGE_REPO}:sha-${SHORT_SHA}"
+          echo "Using image: $IMAGE"
+
+          aws eks update-kubeconfig --region "$AWS_REGION" --name "$CLUSTER_NAME"
+
+          kubectl -n "$NAMESPACE" set image "deploy/$DEPLOYMENT" "$CONTAINER=$IMAGE" --record
+          kubectl -n "$NAMESPACE" rollout status "deploy/$DEPLOYMENT" --timeout=300s
+
+          echo "Deployed. Current image:"
+          kubectl -n "$NAMESPACE" get deploy "$DEPLOYMENT" -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+
+
       - name: Install kubectl
         if: github.ref == 'refs/heads/main'
         uses: azure/setup-kubectl@v4
