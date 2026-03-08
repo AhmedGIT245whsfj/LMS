@@ -7,8 +7,8 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 WORKDIR /var/www/html
 
-# Copy project into Apache docroot so /var/www/html is NOT empty
-COPY . /var/www/html
+# Copy only the canonical application directory
+COPY ELearning/ /var/www/html/
 
 # Permissions
 RUN chown -R www-data:www-data /var/www/html
