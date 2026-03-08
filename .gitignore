@@ -1,1 +1,26 @@
+# k8s secrets
 k8s/**/secret.yaml
+
+# backups and temp files
+*.bak
+*.bak.*
+*backup*
+*_backup*
+_quarantine_cleanup_*/
+_restore_work/
+
+# logs
+*.log
+
+# terraform local state and secrets
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/.terraform.lock.hcl
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
