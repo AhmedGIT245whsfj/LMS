@@ -1,0 +1,221 @@
+window.__itvBlurTimer = window.__itvBlurTimer || null;
+$(document).ready(function () {
+  // Email exists check
+  $("#stuemail").on("blur", function(e){
+    e.preventDefault();
+    e.stopPropagation();
+
+    
+    if (window.__itvBlurTimer) { clearTimeout(window.__itvBlurTimer); }
+    window.__itvBlurTimer = setTimeout(function(){
+var reg = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+    var stuemail = ($("#stuemail").val() || "").trim();
+
+    $.ajax({
+      url: "/Student/addstudent_v2.php",
+      type: "POST",
+      dataType: "text",
+      data: { checkemail: "checkmail", stuemail: stuemail },
+      success: function (data) {
+        var resp = (data === undefined || data === null) ? "" : ("" + data);
+        resp = resp.trim();
+
+        if (resp === "OK" || resp === "1") {
+          $("#successMsg").html('<span style="color:green;">Registration successful. You can login now.</span>');
+          var f = document.getElementById("stuRegForm");
+          if (f) f.reset();
+        } else if (resp === "Failed") {
+          $("#successMsg").html('<span style="color:red;">Email already registered.</span>');
+        } else {
+          $("#successMsg").html('<span style="color:red;">Unexpected response.</span>');
+          console.log("addStu response:", data);
+        }
+      },
+      error: function(xhr) {
+          var txt = (xhr && xhr.responseText) ? String(xhr.responseText).slice(0, 500) : "";
+          $("#successMsg").html('<span style="color:red;">Request failed: HTTP ' + (xhr ? xhr.status : 0) + '</span>');
+          console.log("ajax error:", xhr && xhr.status, txt);
+
+          if (typeof window.__itverseFallbackSignup === "function") {
+            window.__itverseFallbackSignup({
+              stuname: $("#stuname").val(),
+              stuemail: $("#stuemail").val(),
+              stupass: $("#stupass").val(),
+              preferred_track_id: $("#preferred_track").val(),
+              experience_level: $("#experience_level").val()
+            });
+          }
+        }, 250);
+});
+
+        }
+      }
+    });
+  });
+
+  $("#stuname").on("blur", function() {
+    if (($("#stuname").val() || "").trim() !== "") $("#statusMsg1").html(" ");
+  });
+
+  $("#stupass").on("blur", function() {
+    if (($("#stupass").val() || "") !== "") $("#statusMsg3").html(" ");
+  });
+});
+
+// Signup
+function addStu() {
+  try {
+    var stuname = ($("#stuname").val() || "").trim();
+    var stuemail = ($("#stuemail").val() || "").trim();
+    var stupass = $("#stupass").val() || "";
+    var track = $("#preferred_track").val() || "";
+    var level = $("#experience_level").val() || "";
+
+    $("#statusMsg1, #statusMsg2, #statusMsg3, #successMsg").html("");
+
+    if (!stuname) {
+      $("#statusMsg1").html('<small style="color:red;">Please enter name</small>');
+      return;
+    }
+    if (!stuemail) {
+      $("#statusMsg2").html('<small style="color:red;">Please enter email</small>');
+      return;
+    }
+    if (!stupass || stupass.length < 6) {
+      $("#statusMsg3").html('<small style="color:red;">Password must be at least 6 characters</small>');
+      return;
+    }
+
+    $.ajax({
+      url: "/Student/addstudent_v2.php",
+      method: "POST",
+      dataType: "text",
+      data: {
+        stusignup: 1,
+        stuname: stuname,
+        stuemail: stuemail,
+        stupass: stupass,
+        preferred_track_id: track,
+        experience_level: level
+      },
+      success: function (data) {
+        var resp = (data === undefined || data === null) ? "" : ("" + data);
+        resp = resp.trim();
+
+        if (resp === "OK" || resp === "1") {
+          $("#successMsg").html('<span style="color:green;">Registration successful. You can login now.</span>');
+          var f = document.getElementById("stuRegForm");
+          if (f) f.reset();
+        } else if (resp === "Failed") {
+          $("#successMsg").html('<span style="color:red;">Email already registered.</span>');
+        } else {
+          $("#successMsg").html('<span style="color:red;">Unexpected response.</span>');
+          console.log("addStu response:", data);
+        }
+      },
+      error: function(xhr) {
+          var txt = (xhr && xhr.responseText) ? String(xhr.responseText).slice(0, 500) : "";
+          $("#successMsg").html('<span style="color:red;">Request failed: HTTP ' + (xhr ? xhr.status : 0) + '</span>');
+          console.log("ajax error:", xhr && xhr.status, txt);
+
+          if (typeof window.__itverseFallbackSignup === "function") {
+            window.__itverseFallbackSignup({
+              stuname: $("#stuname").val(),
+              stuemail: $("#stuemail").val(),
+              stupass: $("#stupass").val(),
+              preferred_track_id: $("#preferred_track").val(),
+              experience_level: $("#experience_level").val()
+            });
+          }
+        });
+        }
+      }
+    });
+  } catch (e) {
+    console.log("addStu exception:", e);
+  }
+}
+
+// Student login (kept compatible)
+function checkStuLogin() {
+  try {
+    var email = ($("#stuLogEmail").val() || "").trim();
+    var pass = $("#stuLogPass").val() || "";
+
+    $("#statusLogMsg").html("");
+
+    if (!email || !pass) {
+      $("#statusLogMsg").html('<small style="color:red;">Please enter email and password</small>');
+      return;
+    }
+
+    $.ajax({
+      url: "Student/stulogin.php",
+      method: "POST",
+      dataType: "text",
+      data: { checkLogemail: email, checkLogpass: pass },
+      success: function (data) {
+        var resp = (data === undefined || data === null) ? "" : ("" + data);
+        resp = resp.trim();
+
+        if (resp === "OK" || resp === "1") {
+          $("#successMsg").html('<span style="color:green;">Registration successful. You can login now.</span>');
+          var f = document.getElementById("stuRegForm");
+          if (f) f.reset();
+        } else if (resp === "Failed") {
+          $("#successMsg").html('<span style="color:red;">Email already registered.</span>');
+        } else {
+          $("#successMsg").html('<span style="color:red;">Unexpected response.</span>');
+          console.log("addStu response:", data);
+        }
+      },
+      error: function(xhr) {
+          var txt = (xhr && xhr.responseText) ? String(xhr.responseText).slice(0, 500) : "";
+          $("#successMsg").html('<span style="color:red;">Request failed: HTTP ' + (xhr ? xhr.status : 0) + '</span>');
+          console.log("ajax error:", xhr && xhr.status, txt);
+
+          if (typeof window.__itverseFallbackSignup === "function") {
+            window.__itverseFallbackSignup({
+              stuname: $("#stuname").val(),
+              stuemail: $("#stuemail").val(),
+              stupass: $("#stupass").val(),
+              preferred_track_id: $("#preferred_track").val(),
+              experience_level: $("#experience_level").val()
+            });
+          }
+        });
+        }
+      }
+    });
+  } catch (e) {
+    console.log("checkStuLogin exception:", e);
+  }
+}
+
+// itvPreventEnterSubmit
+$(document).on("keydown", "input", function(e){
+  var id = (e.target && e.target.id) ? e.target.id : "";
+  if ((id === "stuname" || id === "stuemail" || id === "stupass" || id === "stupassword") && e.key === "Enter") {
+    e.preventDefault();
+    return false;
+  }
+});
+
+function itvAjaxShowError(msg) {
+  try {
+    var el = document.getElementById("itvSignupError");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "itvSignupError";
+      el.style.marginTop = "12px";
+      el.style.color = "red";
+      var btn = document.querySelector("button, input[type='button'], input[type='submit']");
+      if (btn && btn.parentNode) {
+        btn.parentNode.appendChild(el);
+      } else {
+        document.body.appendChild(el);
+      }
+    }
+    el.textContent = msg;
+  } catch (e) {}
+}

@@ -1,0 +1,47 @@
+
+<form role="form" id="stuRegForm">
+   <div class="form-group">
+     <i class="fas fa-user"></i><label for="stuname" class="pl-2 font-weight-bold">Name</label><small id="statusMsg1"></small><input type="text"
+       class="form-control" placeholder="Name" name="stuname" id="stuname">
+   </div>
+   <div class="form-group">
+   <i class="fas fa-envelope"></i><label for="stuemail" class="pl-2 font-weight-bold">Email</label><small id="statusMsg2"></small><input type="email"
+       class="form-control" placeholder="Email" name="stuemail" id="stuemail">
+     <small class="form-text">We'll never share your email with anyone else.</small>
+   </div>
+   <div class="form-group">
+     <i class="fas fa-key"></i><label for="stupass" class="pl-2 font-weight-bold">New
+       Password</label><small id="statusMsg3"></small><input type="password" class="form-control" placeholder="Password" name="stupass" id="stupass">
+      <div class="form-group">
+        <label for="preferred_track">Preferred Track</label>
+        <select class="form-control" id="preferred_track" name="preferred_track">
+          <?php
+            if (!isset($conn)) { include_once __DIR__ . '/dbConnection.php'; }
+            $rs = $conn->query("SELECT track_id, track_name FROM track ORDER BY track_id");
+            if ($rs) {
+              while ($t = $rs->fetch_assoc()) {
+                $tid = (int)$t['track_id'];
+                $tname = htmlspecialchars($t['track_name'] ?? '', ENT_QUOTES);
+                echo "<option value=\"{$tid}\">{$tname}</option>";
+              }
+            }
+          ?>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="experience_level">Experience Level</label>
+        <select class="form-control" id="experience_level" name="experience_level">
+          <option value="beginner">Beginner</option>
+          <option value="experienced">Experienced</option>
+        </select>
+      </div>
+
+      <button type="button" class="btn btn-primary" id="signup" onclick="addStu()">Sign Up</button>
+      <div style="margin-top:10px;" id="successMsg"></div>
+
+   </div>
+ </form>
+<script src="js/jquery.min.js"></script>
+
+<script src="js/ajaxrequest.js?v=4"></script>

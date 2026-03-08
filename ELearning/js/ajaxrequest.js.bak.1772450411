@@ -1,0 +1,75 @@
+$(document).ready(function() {
+  // Ajax Call for Already Exists Email Verification
+  $("#stuemail").on("keypress blur", function() {
+    var reg = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+    var stuemail = $("#stuemail").val();
+    $.ajax({
+      url: "/Student/addstudent_v2.php",
+      type: "post",
+      data: {
+        checkemail: "checkmail",
+        stuemail: stuemail
+      },
+      success: function(data) {
+        
+        // Accept both legacy "OK" and numeric 1 responses
+        if (data === 1 || data === "1" || data === "OK") {
+          $("#successMsg").html('<span style="color:green;">Registration successful. You can login now.</span>');
+          if ($("#stuRegForm").length) { $("#stuRegForm")[0].reset(); }
+          return;
+        }
+
+        // Common failure responses
+        if (data === 0 || data === "0" || data === "Failed") {
+          $("#successMsg").html('<span style="color:red;">Email already registered.</span>');
+          return;
+        }
+
+        $("#successMsg").html('<span style="color:red;">Unexpected response.</span>');
+        console.log("addStu response:", data);
+},
+      error: function (xhr) {
+        $("#successMsg").html('<span style="color:red;">Request failed. Check console.</span>');
+        console.log("addStu ajax error:", xhr.status, xhr.responseText);
+      }
+    });
+  } catch (e) {
+    console.log("addStu exception:", e);
+  }
+}
+function checkStuLogin() {
+  try {
+    var email = $("#stuLogEmail").val().trim();
+    var pass = $("#stuLogPass").val();
+
+    $("#statusLogMsg").html("");
+
+    if (!email || !pass) {
+      $("#statusLogMsg").html('<small style="color:red;">Please enter email and password</small>');
+      return;
+    }
+
+    $.ajax({
+      url: "Student/stulogin.php",
+      method: "POST",
+      dataType: "json",
+      data: {
+        checkLogemail: email,
+        checkLogpass: pass
+      },
+      success: function (data) {
+        if (data === 1 || data === "1") {
+          window.location.href = "index.php";
+        } else {
+          $("#statusLogMsg").html('<small style="color:red;">Invalid email or password</small>');
+        }
+      },
+      error: function (xhr) {
+        $("#statusLogMsg").html('<small style="color:red;">Login request failed. Check console.</small>');
+        console.log("login ajax error:", xhr.status, xhr.responseText);
+      }
+    });
+  } catch (e) {
+    console.log("checkStuLogin exception:", e);
+  }
+}
