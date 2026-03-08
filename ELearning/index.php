@@ -7,7 +7,7 @@ include('./mainInclude/header.php');
 <div class="container-fluid remove-vid-marg hero-fallback">
   <div class="vid-parent desktop-video">
     <video playsinline autoplay muted loop>
-      <source src="video/banvid.mp4" type="video/mp4" />
+      <source src="video/vecteezy_hacking-animation-footage-of-blue-coding-lines-typing-on-a_52103764.mp4" type="video/mp4" />
     </video>
     <div class="vid-overlay"></div>
   </div>
