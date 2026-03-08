@@ -102,10 +102,10 @@ if (isset($_REQUEST['delete'])) {
           echo '<tr>';
           echo '<th scope="row">' . $row["order_id"] . '</th>';
           echo '<td>' . $row["course_id"] . '</td>';
-          echo '<td>' . $row["stu_email"] . '</td>';
+          echo '<td>' . ($row["stu_email"] ?? "") . '</td>';
           echo '<td>' . $row["order_date"] . '</td>';
-          echo '<td>' . $row["amount"] . '</td>';
-          echo '<td><form action="" method="POST" class="d-inline"><input type="hidden" name="id" value=' . (int)$row["co_id"] . '><button type="submit" class="btn btn-secondary" name="delete" value="Delete"><i class="far fa-trash-alt"></i></button></form></td>';
+          echo '<td>' . ($row["amount"] ?? "") . '</td>';
+          echo '<td><form action="" method="POST" class="d-inline"><input type="hidden" name="id" value=' . (int)($row["co_id"] ?? "") . '><button type="submit" class="btn btn-secondary" name="delete" value="Delete"><i class="far fa-trash-alt"></i></button></form></td>';
           echo '</tr>';
         }
         echo '</tbody></table>';
