@@ -4,6 +4,7 @@ metadata:
   name: itverse-config
   namespace: itverse
 data:
-  DB_HOST: "db"
+  DB_HOST: "itverse-rds.c6pw0yaqi3bp.us-east-1.rds.amazonaws.com"
+  DB_PORT: "3306"
   DB_NAME: "lms_db"
   DB_USER: "itverse"
