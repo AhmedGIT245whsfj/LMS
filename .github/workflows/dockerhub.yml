@@ -13,10 +13,14 @@ env:
   IMAGE_NAME: itverse-web
   AWS_REGION: us-east-1
   EKS_CLUSTER_NAME: itverse-eks
+  K8S_NAMESPACE: itverse
+  K8S_DEPLOYMENT: itverse-web
+  K8S_CONTAINER: web
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,7 +43,7 @@ jobs:
             type=raw,value=latest
             type=sha,prefix=sha-
 
-      - name: Build and push
+      - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -50,37 +54,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Deploy to EKS (set image by sha tag)
-        if: github.ref == 'refs/heads/main'
-        env:
-          AWS_REGION: us-east-1
-          CLUSTER_NAME: itverse-eks
-          NAMESPACE: itverse
-          DEPLOYMENT: itverse-web
-          CONTAINER: web
-          IMAGE_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
-        run: |
-          set -e
-          SHORT_SHA="${GITHUB_SHA::7}"
-          IMAGE="${IMAGE_REPO}:sha-${SHORT_SHA}"
-          echo "Using image: $IMAGE"
-
-          aws eks update-kubeconfig --region "$AWS_REGION" --name "$CLUSTER_NAME"
-
-          kubectl -n "$NAMESPACE" set image "deploy/$DEPLOYMENT" "$CONTAINER=$IMAGE" --record
-          kubectl -n "$NAMESPACE" rollout status "deploy/$DEPLOYMENT" --timeout=300s
-
-          echo "Deployed. Current image:"
-          kubectl -n "$NAMESPACE" get deploy "$DEPLOYMENT" -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
-
-
-      - name: Install kubectl
-        if: github.ref == 'refs/heads/main'
-        uses: azure/setup-kubectl@v4
-        with:
-          version: 'latest'
-
-      - name: Deploy to EKS (rolling update)
+      - name: Configure AWS credentials
         if: github.ref == 'refs/heads/main'
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -91,16 +65,31 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: azure/setup-kubectl@v4
         with:
-          version: 'latest'
+          version: latest
 
-      - name: Rollout restart in EKS
+      - name: Update kubeconfig
         if: github.ref == 'refs/heads/main'
         run: |
+          aws eks update-kubeconfig \
+            --region "${AWS_REGION}" \
+            --name "${EKS_CLUSTER_NAME}"
+
+      - name: Deploy to EKS using sha image tag
+        if: github.ref == 'refs/heads/main'
+        env:
+          IMAGE_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+        run: |
           set -e
-          aws eks update-kubeconfig --name "${{ env.EKS_CLUSTER_NAME }}" --region "${{ env.AWS_REGION }}"
-          kubectl -n itverse rollout restart deploy/itverse-web
-          kubectl -n itverse rollout status deploy/itverse-web --timeout=240s
-          echo "Deployed. Current image:"
-          kubectl -n itverse get deploy itverse-web -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
+          SHORT_SHA="${GITHUB_SHA::7}"
+          IMAGE="${IMAGE_REPO}:sha-${SHORT_SHA}"
 
+          echo "Deploying image: ${IMAGE}"
 
+          kubectl -n "${K8S_NAMESPACE}" set image "deployment/${K8S_DEPLOYMENT}" \
+            "${K8S_CONTAINER}=${IMAGE}"
+
+          kubectl -n "${K8S_NAMESPACE}" rollout status "deployment/${K8S_DEPLOYMENT}" --timeout=300s
+
+          echo "Current deployment image:"
+          kubectl -n "${K8S_NAMESPACE}" get deployment "${K8S_DEPLOYMENT}" \
+            -o jsonpath='{.spec.template.spec.containers[0].image}{"\n"}'
