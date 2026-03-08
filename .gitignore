@@ -6,11 +6,16 @@ k8s/**/secret.yaml
 *.bak.*
 *backup*
 *_backup*
+*.BAK
 _quarantine_cleanup_*/
 _restore_work/
 
 # logs
 *.log
+
+# large local media
+ELearning/video/
+video/
 
 # terraform local state and secrets
 terraform/.terraform/
