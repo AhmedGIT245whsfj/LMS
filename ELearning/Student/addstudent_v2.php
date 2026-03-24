@@ -34,7 +34,9 @@ function normalize_level(string $v): string {
 
 function resolve_track_id(mysqli $conn, string $raw): int {
     $raw = trim($raw);
-    if ($raw === '') return 0;
+    if ($raw === '') {
+        return 0;
+    }
 
     if (ctype_digit($raw)) {
         $id = (int)$raw;
@@ -43,7 +45,9 @@ function resolve_track_id(mysqli $conn, string $raw): int {
             $st->bind_param("i", $id);
             $st->execute();
             $res = $st->get_result();
-            if ($res && $res->num_rows > 0) return $id;
+            if ($res && $res->num_rows > 0) {
+                return $id;
+            }
         }
     }
 
@@ -58,6 +62,28 @@ function resolve_track_id(mysqli $conn, string $raw): int {
     }
 
     return 0;
+}
+
+function resolve_track_name(mysqli $conn, string $raw): string {
+    $raw = trim($raw);
+    if ($raw === '') {
+        return '';
+    }
+
+    if (ctype_digit($raw)) {
+        $id = (int)$raw;
+        $st = $conn->prepare("SELECT track_name FROM track WHERE track_id = ? LIMIT 1");
+        if ($st) {
+            $st->bind_param("i", $id);
+            $st->execute();
+            $res = $st->get_result();
+            if ($res && ($row = $res->fetch_assoc())) {
+                return trim((string)$row['track_name']);
+            }
+        }
+    }
+
+    return $raw;
 }
 
 /* check email mode */
@@ -101,6 +127,7 @@ if ($levelRaw === '') $levelRaw = p('stuexp');
 
 $experience = normalize_level($levelRaw);
 $trackId = resolve_track_id($conn, $trackRaw);
+$preferredTrack = resolve_track_name($conn, $trackRaw);
 
 if ($name === '' || $email === '' || $pass === '') {
     http_response_code(400);
@@ -117,7 +144,7 @@ if (strlen($pass) < 6) {
     exit('0');
 }
 
-if ($trackId <= 0) {
+if ($preferredTrack === '') {
     http_response_code(400);
     exit('0');
 }
@@ -127,6 +154,7 @@ if (!$chk) {
     http_response_code(500);
     exit('0');
 }
+
 $chk->bind_param("s", $email);
 $chk->execute();
 $res = $chk->get_result();
@@ -144,25 +172,50 @@ if ($hash === false) {
 $stu_occ = $experience;
 $stu_img = '';
 
-$stmt = $conn->prepare("
-  INSERT INTO student 
-  (stu_name, stu_email, stu_pass, preferred_track, experience_level, preferred_track_id)
-  VALUES (?, ?, ?, ?, ?, ?)
-");
+if ($trackId > 0) {
+    $stmt = $conn->prepare("
+        INSERT INTO student
+        (stu_name, stu_email, stu_pass, stu_occ, stu_img, preferred_track, experience_level, preferred_track_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    if (!$stmt) {
+        http_response_code(500);
+        exit('0');
+    }
 
-$track     = $_POST["track"] ?? "";
-$level     = $_POST["level"] ?? "";
-$track_id  = (int)($_POST["track_id"] ?? 0);
+    $stmt->bind_param(
+        "sssssssi",
+        $name,
+        $email,
+        $hash,
+        $stu_occ,
+        $stu_img,
+        $preferredTrack,
+        $experience,
+        $trackId
+    );
+} else {
+    $stmt = $conn->prepare("
+        INSERT INTO student
+        (stu_name, stu_email, stu_pass, stu_occ, stu_img, preferred_track, experience_level)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ");
+    if (!$stmt) {
+        http_response_code(500);
+        exit('0');
+    }
 
-$stmt->bind_param(
-  "sssssi",
-  $name,
-  $email,
-  $password,
-  $track,
-  $level,
-  $track_id
-);
+    $stmt->bind_param(
+        "sssssss",
+        $name,
+        $email,
+        $hash,
+        $stu_occ,
+        $stu_img,
+        $preferredTrack,
+        $experience
+    );
+}
 
 if (!$stmt->execute()) {
     http_response_code(500);
