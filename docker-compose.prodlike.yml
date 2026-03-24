@@ -1,0 +1,14 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: lms_db
+      DB_USER: itverse
+      DB_PASS: itverse123
+    depends_on:
+      db:
+        condition: service_healthy

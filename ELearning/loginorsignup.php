@@ -93,7 +93,7 @@ include('./mainInclude/footer.php');
     var ok = (typeof window.addStu === 'function');
     if (!ok) {
       var el = document.getElementById('jsHealth');
-      if (el) el.textContent = 'JS not loaded: addStu() is missing. Check js/ajaxrequest.js.';
+      if (el) el.textContent = 'JS not loaded: addStu() is missing. Check js/ajaxrequest.js?v=20260323signupfix.';
       if (console && console.log) console.log('addStu is missing. ajaxrequest.js not loaded or has errors.');
     }
   })();

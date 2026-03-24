@@ -17,3 +17,187 @@
   right: 20px;
   margin-bottom: 30px;
 }
+
+
+
+/* ===== ITVERSE ADMIN SAFE POLISH ===== */
+body{
+  background: #f4f7fb !important;
+  color: #0f172a;
+}
+
+/* topbar */
+.navbar,
+.navbar-dark,
+.bg-dark{
+  background: linear-gradient(90deg, #0f172a, #1e293b) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 28px rgba(15,23,42,0.16);
+}
+
+/* sidebar */
+.sidebar,
+.bg-light.sidebar,
+nav.col-md-2,
+nav.col-sm-2{
+  background: #ffffff !important;
+  border-right: 1px solid rgba(15,23,42,0.08);
+  box-shadow: 8px 0 24px rgba(15,23,42,0.04);
+}
+
+.sidebar .nav-link,
+nav .nav-link{
+  color: #334155 !important;
+  font-weight: 600;
+  border-radius: 12px;
+  margin: 6px 10px;
+  padding: 12px 14px !important;
+  transition: all .2s ease;
+}
+
+.sidebar .nav-link:hover,
+nav .nav-link:hover{
+  background: #eff6ff !important;
+  color: #0f172a !important;
+}
+
+.sidebar .nav-link.active,
+nav .nav-link.active{
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(37,99,235,0.18);
+}
+
+/* main content area */
+main,
+.col-md-10,
+.col-lg-10{
+  padding-top: 24px !important;
+}
+
+/* dashboard cards */
+.card{
+  border: 1px solid rgba(15,23,42,0.08) !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+  box-shadow: 0 16px 34px rgba(15,23,42,0.08) !important;
+}
+
+.card-header{
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.card-body{
+  padding: 20px !important;
+}
+
+.card .display-4,
+.card h2,
+.card h3{
+  font-weight: 800;
+}
+
+/* keep stat cards attractive even with bootstrap contextual backgrounds */
+.bg-danger.card,
+.bg-success.card,
+.bg-info.card,
+.card.bg-danger,
+.card.bg-success,
+.card.bg-info{
+  color: #fff !important;
+  border: 0 !important;
+}
+
+.card.bg-danger{
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+}
+.card.bg-success{
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+}
+.card.bg-info{
+  background: linear-gradient(135deg, #06b6d4, #0284c7) !important;
+}
+
+/* tables */
+.table{
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.table thead th{
+  background: #1f2937 !important;
+  color: #fff !important;
+  border: 0 !important;
+  font-weight: 700;
+  padding: 16px 14px !important;
+}
+
+.table td{
+  vertical-align: middle !important;
+  padding: 14px !important;
+  border-top: 1px solid rgba(15,23,42,0.06) !important;
+}
+
+.table tbody tr:hover{
+  background: #f8fbff !important;
+}
+
+/* buttons */
+.btn{
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}
+
+.btn-danger{
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  border: 0 !important;
+}
+
+.btn-primary{
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  border: 0 !important;
+}
+
+.btn-secondary,
+.btn-dark{
+  border: 0 !important;
+}
+
+/* forms */
+.form-control{
+  border-radius: 12px !important;
+  border: 1px solid rgba(15,23,42,0.12) !important;
+  box-shadow: none !important;
+}
+
+.form-control:focus{
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 4px rgba(56,189,248,0.14) !important;
+}
+
+/* generic section headers */
+h1, h2, h3, h4{
+  color: #0f172a;
+  font-weight: 800;
+}
+
+/* responsive */
+@media (max-width: 991px){
+  .sidebar .nav-link,
+  nav .nav-link{
+    margin: 4px 8px;
+    padding: 10px 12px !important;
+  }
+
+  .card{
+    border-radius: 16px !important;
+  }
+
+  .table thead th,
+  .table td{
+    padding: 12px 10px !important;
+  }
+}

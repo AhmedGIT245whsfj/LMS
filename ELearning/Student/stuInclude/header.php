@@ -86,6 +86,7 @@ include_once('../dbConnection.php');
 body{ padding-top:60px !important; }
 </style>
 
+  <link rel="stylesheet" type="text/css" href="../css/student-polish-hotfix.css">
 </head>
 
 <body>

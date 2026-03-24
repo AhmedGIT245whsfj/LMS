@@ -45,12 +45,6 @@ if ($trackId > 0) {
 }
 ?>
 
-<div class="container-fluid bg-dark">
-  <div class="row">
-    <img src="./image/coursebanner.jpg" alt="courses" style="height:500px; width:100%; object-fit:cover; box-shadow:10px;"/>
-  </div>
-</div>
-
 <div class="container mt-5">
 
   <?php if ($trackId > 0 && $selectedTrack): ?>

@@ -1,0 +1,110 @@
+/* ITVERSE student area hotfix - hide legacy duplicated shell */
+html, body {
+  overflow-x: hidden !important;
+  background: #f4f7fb !important;
+}
+
+/* hide old top bar */
+.navbar.navbar-dark.fixed-top.p-0.shadow,
+nav.navbar.navbar-dark.fixed-top.p-0.shadow,
+a.navbar-brand.col-sm-3.col-md-2.mr-0 {
+  display: none !important;
+}
+
+/* hide old left dashboard sidebar */
+.container-fluid > .row > nav.col-sm-3.col-md-2.bg-light.sidebar,
+.container-fluid > .row > nav.col-md-2.d-none.d-md-block.bg-light.sidebar,
+.sidebar-sticky,
+.sidebar {
+  display: none !important;
+}
+
+/* hide old empty dashboard content area if legacy template still renders */
+.container-fluid > .row > main.col-sm-9.ml-sm-auto.col-md-10,
+.container-fluid > .row > main.col-md-9.ml-sm-auto.col-lg-10.px-4,
+main.col-sm-9.ml-sm-auto.col-md-10,
+main.col-md-9.ml-sm-auto.col-lg-10.px-4 {
+  background: transparent !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+
+/* kill weird broken old image */
+img[alt="studentimage"] {
+  display: none !important;
+}
+
+/* normalize spacing after removing fixed legacy bar */
+body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* if modern redesigned shell exists, center and breathe */
+.itv-profile-page,
+.itv-student-page,
+.itv-dashboard-page,
+.student-dashboard-modern,
+.student-profile-modern {
+  max-width: 1280px;
+  margin: 32px auto !important;
+  padding: 0 20px 40px !important;
+}
+
+/* generic cleanup for modern cards/buttons if already present */
+.card,
+.profile-card,
+.dashboard-card,
+.student-card {
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08) !important;
+}
+
+.btn,
+button,
+input[type="submit"] {
+  border-radius: 14px !important;
+}
+
+/* responsive cleanup */
+@media (max-width: 991px) {
+  .container-fluid,
+  .container,
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .itv-profile-page,
+  .itv-student-page,
+  .itv-dashboard-page,
+  .student-dashboard-modern,
+  .student-profile-modern {
+    padding: 0 14px 28px !important;
+    margin-top: 18px !important;
+  }
+}
+
+
+/* ===== EMAIL POLISH ===== */
+.itv-profile-email,
+.profile-email,
+.student-email {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.12);
+  padding: 6px 12px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  letter-spacing: 0.3px;
+}
+
+/* لو على خلفية فاتحة */
+.itv-profile-email.light,
+.profile-email.light {
+  color: #475569;
+  background: #f1f5f9;
+}

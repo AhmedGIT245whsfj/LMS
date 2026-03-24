@@ -113,7 +113,7 @@ if (isset($_POST['trackSubmitBtn'])) {
 
     <div class="text-center">
       <button type="submit" class="btn btn-danger" id="trackSubmitBtn" name="trackSubmitBtn">Submit</button>
-      <a href="track.php" class="btn btn-secondary">Close</a>
+      <a href="tracks.php" class="btn btn-secondary">Close</a>
     </div>
     <?php if ($msg) { echo $msg; } ?>
   </form>

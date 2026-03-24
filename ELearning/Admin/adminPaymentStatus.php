@@ -1,4 +1,5 @@
 <?php
+ob_start();
   define('TITLE', 'Payment Status');
   define('PAGE', 'paymentstatus');
   include('./adminInclude/header.php'); 
@@ -92,4 +93,5 @@
 </div>  <!-- div Conatiner-fluid close from header -->
 <?php
 include('./adminInclude/footer.php'); 
-?> 
+?>
+<?php if (ob_get_level() > 0) { ob_end_flush(); } ?>

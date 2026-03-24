@@ -5,130 +5,260 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-/**
- * We rely on the logged-in email (stable in your project).
- * Accept both keys to be compatible with old/new login flows.
- */
-$stuEmail = $_SESSION['stu_email'] ?? $_SESSION['stuLogEmail'] ?? '';
-$stuEmail = is_string($stuEmail) ? trim($stuEmail) : '';
-
-if ($stuEmail === '') {
-    header('Location: ../index.php');
-    exit;
-}
-
-$pageTitle = 'My Profile';
-
 require_once __DIR__ . '/../dbConnection.php';
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-include __DIR__ . '/stuInclude/header.php';
-
-/**
- * Detect real student table column names (project variants).
- * We'll pick the first match to avoid "unknown column" errors.
- */
-function itv_find_student_email_column(mysqli $conn): string
-{
-    $candidates = ['stu_email', 'email', 'stuEmail', 'stuLogEmail'];
-    $cols = [];
-    $res = $conn->query("SHOW COLUMNS FROM student");
-    while ($row = $res->fetch_assoc()) {
-        $cols[] = $row['Field'];
-    }
-    foreach ($candidates as $c) {
-        if (in_array($c, $cols, true)) return $c;
-    }
-    // fallback to first reasonable column containing 'email'
-    foreach ($cols as $c) {
-        if (stripos($c, 'email') !== false) return $c;
-    }
-    return 'stu_email';
-}
-
-$emailCol = itv_find_student_email_column($conn);
-
-$student = null;
-try {
-    $sql = "SELECT * FROM student WHERE {$emailCol} = ? LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $stuEmail);
-    $stmt->execute();
-    $student = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-} catch (mysqli_sql_exception $e) {
-    // render friendly error (no stack trace in UI)
-    echo '<div class="container-fluid p-4">';
-    echo '<div class="alert alert-danger">';
-    echo '<h5 class="mb-1">Profile error</h5>';
-    echo '<div>Database query failed. Please try again.</div>';
-    echo '</div></div>';
-    include __DIR__ . '/stuInclude/footer.php';
+if (empty($_SESSION['is_login']) || empty($_SESSION['stuLogEmail'])) {
+    header("Location: /loginorsignup.php");
     exit;
 }
 
-if (!$student) {
-    echo '<div class="container-fluid p-4">';
-    echo '<div class="alert alert-warning mb-0">Student record not found for this session.</div>';
-    echo '</div>';
-    include __DIR__ . '/stuInclude/footer.php';
+$stuEmail = trim((string)($_SESSION['stu_email'] ?? $_SESSION['stuLogEmail'] ?? ''));
+
+$st = $conn->prepare("SELECT stu_id, stu_name, stu_email, stu_occ, stu_img FROM student WHERE stu_email = ? LIMIT 1");
+$st->bind_param("s", $stuEmail);
+$st->execute();
+$res = $st->get_result();
+$row = $res ? $res->fetch_assoc() : null;
+$st->close();
+
+if (!$row) {
+    include_once __DIR__ . '/stuInclude/header.php';
+    echo '<div class="container mt-5"><div class="alert alert-danger">Student record not found.</div></div>';
+    include_once __DIR__ . '/stuInclude/footer.php';
     exit;
 }
 
-// pick safe display fields (works with different schemas)
-$stuName = $student['stu_name'] ?? $student['stuname'] ?? $student['name'] ?? 'Student';
-$stuOcc  = $student['stu_occ'] ?? $student['stuOcc'] ?? $student['occupation'] ?? '';
-$stuImg  = $student['stu_img'] ?? $student['stu_img_path'] ?? $student['image'] ?? '';
+$stuId   = (int)($row['stu_id'] ?? 0);
+$stuName = trim((string)($row['stu_name'] ?? 'Student'));
+$stuMail = trim((string)($row['stu_email'] ?? ''));
+$stuOcc  = trim((string)($row['stu_occ'] ?? ''));
+$stuImg  = trim((string)($row['stu_img'] ?? ''));
 
-$stuName = is_string($stuName) ? $stuName : 'Student';
-$stuOcc  = is_string($stuOcc) ? $stuOcc : '';
-$stuImg  = is_string($stuImg) ? $stuImg : '';
+$avatar = $stuImg;
+if ($avatar !== '') {
+    $avatar = str_replace('../', '/', $avatar);
+    if (!preg_match('#^https?://#i', $avatar) && strpos($avatar, '/') !== 0) {
+        $avatar = '/' . ltrim($avatar, '/');
+    }
+} else {
+    $avatar = 'https://ui-avatars.com/api/?name=' . urlencode($stuName) . '&background=0b5ed7&color=fff&size=240';
+}
 
-$stuNameEsc = htmlspecialchars($stuName, ENT_QUOTES, 'UTF-8');
-$stuOccEsc  = htmlspecialchars($stuOcc, ENT_QUOTES, 'UTF-8');
-$stuEmailEsc = htmlspecialchars($stuEmail, ENT_QUOTES, 'UTF-8');
-
-// image fallback
-$imgSrc = trim($stuImg) !== '' ? $stuImg : '../image/stu_default.png';
-$imgSrcEsc = htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8');
+include_once __DIR__ . '/stuInclude/header.php';
 ?>
+<style>
+.itv-profile-page{
+  background:#f4f7fb;
+  min-height:calc(100vh - 110px);
+  padding:30px 0 50px;
+}
+.itv-profile-card{
+  background:#fff;
+  border:0;
+  border-radius:24px;
+  box-shadow:0 12px 35px rgba(15,23,42,.08);
+  overflow:hidden;
+}
+.itv-profile-cover{
+  height:140px;
+  background:linear-gradient(135deg,#0f172a 0%,#0b5ed7 55%,#38bdf8 100%);
+}
+.itv-profile-main{
+  padding:0 28px 28px;
+  margin-top:-58px;
+}
+.itv-profile-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.itv-profile-user{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.itv-profile-avatar{
+  width:116px;
+  height:116px;
+  border-radius:50%;
+  object-fit:cover;
+  background:#fff;
+  border:5px solid #fff;
+  box-shadow:0 10px 25px rgba(0,0,0,.18);
+}
+.itv-profile-name{
+  font-size:30px;
+  font-weight:800;
+  color:#0f172a;
+  line-height:1.1;
+  margin-bottom:6px;
+}
+.itv-profile-email{
+  color:#64748b;
+  font-size:15px;
+}
+.itv-badge{
+  display:inline-block;
+  margin-top:10px;
+  padding:7px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  text-transform:capitalize;
+  background:#e0f2fe;
+  color:#0369a1;
+}
+.itv-profile-actions .btn{
+  border-radius:12px;
+  padding:10px 16px;
+  font-weight:700;
+}
+.itv-info-grid{
+  margin-top:28px;
+}
+.itv-info-box{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:18px;
+  padding:18px;
+  height:100%;
+}
+.itv-info-label{
+  color:#64748b;
+  font-size:13px;
+  margin-bottom:8px;
+}
+.itv-info-value{
+  color:#0f172a;
+  font-size:18px;
+  font-weight:700;
+  word-break:break-word;
+}
+.itv-status{
+  margin-top:24px;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(15,23,42,.06);
+  padding:22px;
+}
+.itv-status-title{
+  font-size:18px;
+  font-weight:800;
+  color:#0f172a;
+  margin-bottom:14px;
+}
+.itv-progress{
+  height:10px;
+  background:#e2e8f0;
+  border-radius:999px;
+  overflow:hidden;
+}
+.itv-progress > span{
+  display:block;
+  height:100%;
+  width:78%;
+  background:linear-gradient(90deg,#2563eb,#38bdf8);
+  border-radius:999px;
+}
+.itv-status-text{
+  margin-top:14px;
+  color:#64748b;
+  line-height:1.8;
+}
+@media (max-width: 767px){
+  .itv-profile-main{
+    padding:0 18px 20px;
+  }
+  .itv-profile-name{
+    font-size:24px;
+  }
+  .itv-profile-avatar{
+    width:94px;
+    height:94px;
+  }
+}
+</style>
 
-<div class="container-fluid px-4 py-4">
-  <div class="row">
-    <div class="col-lg-8">
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <div class="d-flex align-items-center gap-3">
-            <img src="<?php echo $imgSrcEsc; ?>" alt="Student" style="width:84px;height:84px;object-fit:cover;border-radius:50%;border:1px solid #eee;">
-            <div>
-              <h4 class="mb-1"><?php echo $stuNameEsc; ?></h4>
-              <div class="text-muted"><?php echo $stuEmailEsc; ?></div>
-              <?php if ($stuOccEsc !== ''): ?>
-                <div class="mt-1"><span class="badge bg-secondary"><?php echo $stuOccEsc; ?></span></div>
-              <?php endif; ?>
-            </div>
-          </div>
+<div class="container-fluid itv-profile-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 mb-4">
+        <?php @include_once __DIR__ . '/stuInclude/sidebar.php'; ?>
+      </div>
 
-          <hr>
+      <div class="col-lg-9">
+        <div class="itv-profile-card">
+          <div class="itv-profile-cover"></div>
 
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="small text-muted">Name</div>
-              <div class="fw-semibold"><?php echo $stuNameEsc; ?></div>
-            </div>
-            <div class="col-md-6">
-              <div class="small text-muted">Email</div>
-              <div class="fw-semibold"><?php echo $stuEmailEsc; ?></div>
-            </div>
-            <div class="col-md-6">
-              <div class="small text-muted">Occupation</div>
-              <div class="fw-semibold"><?php echo $stuOccEsc !== '' ? $stuOccEsc : '-'; ?></div>
-            </div>
-          </div>
+          <div class="itv-profile-main">
+            <div class="itv-profile-head">
+              <div class="itv-profile-user">
+                <img
+                  src="<?php echo htmlspecialchars($avatar, ENT_QUOTES); ?>"
+                  alt="student"
+                  class="itv-profile-avatar"
+                  onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=<?php echo urlencode($stuName); ?>&background=0b5ed7&color=fff&size=240';"
+                >
+                <div>
+                  <div class="itv-profile-name"><?php echo htmlspecialchars($stuName, ENT_QUOTES); ?></div>
+                  <div class="itv-profile-email"><?php echo htmlspecialchars($stuMail, ENT_QUOTES); ?></div>
+                  <span class="itv-badge"><?php echo htmlspecialchars($stuOcc !== '' ? $stuOcc : 'student', ENT_QUOTES); ?></span>
+                </div>
+              </div>
 
-          <div class="mt-4 d-flex gap-2">
-            <a class="btn btn-primary" href="studentProfile.php">Edit Profile</a>
-            <a class="btn btn-outline-secondary" href="studentChangePass.php">Change Password</a>
+              <div class="itv-profile-actions">
+                <a href="/Student/studentProfile.php" class="btn btn-primary mr-2">Edit Profile</a>
+                <a href="/Student/studentChangePass.php" class="btn btn-outline-secondary">Change Password</a>
+              </div>
+            </div>
+
+            <div class="row itv-info-grid">
+              <div class="col-md-4 mb-3">
+                <div class="itv-info-box">
+                  <div class="itv-info-label">Student ID</div>
+                  <div class="itv-info-value"><?php echo $stuId; ?></div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="itv-info-box">
+                  <div class="itv-info-label">Name</div>
+                  <div class="itv-info-value"><?php echo htmlspecialchars($stuName, ENT_QUOTES); ?></div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="itv-info-box">
+                  <div class="itv-info-label">Email</div>
+                  <div class="itv-info-value"><?php echo htmlspecialchars($stuMail, ENT_QUOTES); ?></div>
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <div class="itv-info-box">
+                  <div class="itv-info-label">Occupation / Level</div>
+                  <div class="itv-info-value"><?php echo htmlspecialchars($stuOcc !== '' ? $stuOcc : 'Student', ENT_QUOTES); ?></div>
+                </div>
+              </div>
+
+              <div class="col-md-8 mb-3">
+                <div class="itv-info-box">
+                  <div class="itv-info-label">Account Status</div>
+                  <div class="itv-info-value">Active</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="itv-status">
+              <div class="itv-status-title">Profile Status</div>
+              <div class="itv-progress"><span></span></div>
+              <div class="itv-status-text">
+                Your profile is in good shape. Keep your image and details updated to get a cleaner learning experience and better course recommendations.
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -136,5 +266,4 @@ $imgSrcEsc = htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8');
   </div>
 </div>
 
-<?php
-include __DIR__ . '/stuInclude/footer.php';
+<?php include_once __DIR__ . '/stuInclude/footer.php'; ?>

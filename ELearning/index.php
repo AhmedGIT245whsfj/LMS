@@ -1,4 +1,5 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
 include('./dbConnection.php');
 include('./mainInclude/header.php');
 ?>
@@ -38,6 +39,88 @@ include('./mainInclude/header.php');
 </div>
 
 <?php
+function itv_index_img(string $img): string {
+  $img = trim($img);
+  if ($img === '') return '';
+  if (preg_match('#^(https?:)?/#i', $img)) return $img;
+  if (strpos($img, '../') === 0 || strpos($img, './') === 0) return $img;
+  return './' . ltrim($img, '/');
+}
+
+function itv_get_login_email(): string {
+  $keys = ['stuLogEmail', 'stu_email', 'stuemail', 'email', 'student_email'];
+  foreach ($keys as $k) {
+    if (!empty($_SESSION[$k]) && is_string($_SESSION[$k])) {
+      return trim($_SESSION[$k]);
+    }
+  }
+  return '';
+}
+
+function itv_has_column(mysqli $conn, string $table, string $col): bool {
+  $sql = "SELECT 1
+          FROM information_schema.COLUMNS
+          WHERE TABLE_SCHEMA = DATABASE()
+            AND TABLE_NAME = ?
+            AND COLUMN_NAME = ?
+          LIMIT 1";
+  $st = $conn->prepare($sql);
+  if (!$st) return false;
+  $st->bind_param("ss", $table, $col);
+  $st->execute();
+  $res = $st->get_result();
+  $st->close();
+  return (bool)($res && $res->num_rows > 0);
+}
+
+$isStudentLoggedIn = !empty($_SESSION['is_login']);
+$loginEmail = itv_get_login_email();
+
+$studentTrackId = null;
+$studentLevel   = 'beginner';
+$studentTrackName = '';
+
+if ($isStudentLoggedIn && $loginEmail !== '') {
+  $hasPref = itv_has_column($conn, 'student', 'preferred_track_id');
+  $hasExp  = itv_has_column($conn, 'student', 'experience_level');
+
+  if ($hasPref || $hasExp) {
+    $fields = ["stu_email"];
+    if ($hasPref) $fields[] = "preferred_track_id";
+    if ($hasExp)  $fields[] = "experience_level";
+
+    $sqlStu = "SELECT " . implode(", ", $fields) . " FROM student WHERE stu_email = ? LIMIT 1";
+    $stStu = $conn->prepare($sqlStu);
+    if ($stStu) {
+      $stStu->bind_param("s", $loginEmail);
+      $stStu->execute();
+      $resStu = $stStu->get_result();
+      if ($resStu && ($rowStu = $resStu->fetch_assoc())) {
+        if ($hasPref && isset($rowStu['preferred_track_id']) && $rowStu['preferred_track_id'] !== null && $rowStu['preferred_track_id'] !== '') {
+          $studentTrackId = (int)$rowStu['preferred_track_id'];
+        }
+        if ($hasExp && !empty($rowStu['experience_level'])) {
+          $studentLevel = strtolower(trim((string)$rowStu['experience_level']));
+        }
+      }
+      $stStu->close();
+    }
+  }
+
+  if ($studentTrackId !== null) {
+    $stTrack = $conn->prepare("SELECT track_name FROM track WHERE track_id = ? LIMIT 1");
+    if ($stTrack) {
+      $stTrack->bind_param("i", $studentTrackId);
+      $stTrack->execute();
+      $resTrack = $stTrack->get_result();
+      if ($resTrack && ($rowTrack = $resTrack->fetch_assoc())) {
+        $studentTrackName = (string)($rowTrack['track_name'] ?? '');
+      }
+      $stTrack->close();
+    }
+  }
+}
+
 $topCourses = [];
 $sqlTop = "
   SELECT c.course_id, c.course_name, c.course_desc, c.course_img, c.course_price, c.course_original_price, c.track_id, t.track_name
@@ -58,6 +141,72 @@ if ($resTop && $resTop->num_rows > 0) {
   }
 }
 
+$recommendedCourses = [];
+$recTitle = "Recommended for You";
+$recSubtitle = "Best starting courses based on your selected track and level.";
+
+if ($isStudentLoggedIn) {
+  if ($studentTrackId !== null) {
+    if ($studentLevel === 'experienced') {
+      $sqlRec = "
+        SELECT c.course_id, c.course_name, c.course_desc, c.course_img, c.course_price, c.course_original_price, c.track_id, t.track_name
+        FROM course c
+        JOIN track t ON t.track_id = c.track_id
+        WHERE c.track_id = ?
+        ORDER BY c.course_id DESC
+        LIMIT 4
+      ";
+    } else {
+      $sqlRec = "
+        SELECT c.course_id, c.course_name, c.course_desc, c.course_img, c.course_price, c.course_original_price, c.track_id, t.track_name
+        FROM course c
+        JOIN track t ON t.track_id = c.track_id
+        WHERE c.track_id = ?
+        ORDER BY c.course_id ASC
+        LIMIT 4
+      ";
+    }
+
+    $stRec = $conn->prepare($sqlRec);
+    if ($stRec) {
+      $stRec->bind_param("i", $studentTrackId);
+      $stRec->execute();
+      $resRec = $stRec->get_result();
+      if ($resRec) {
+        while ($r = $resRec->fetch_assoc()) {
+          $recommendedCourses[] = $r;
+        }
+      }
+      $stRec->close();
+    }
+
+    if ($studentTrackName !== '') {
+      if ($studentLevel === 'experienced') {
+        $recSubtitle = "Advanced picks for your {$studentTrackName} track.";
+      } else {
+        $recSubtitle = "Starter picks for your {$studentTrackName} track.";
+      }
+    }
+  }
+
+  if (count($recommendedCourses) === 0) {
+    $sqlFallback = "
+      SELECT c.course_id, c.course_name, c.course_desc, c.course_img, c.course_price, c.course_original_price, c.track_id, t.track_name
+      FROM course c
+      LEFT JOIN track t ON t.track_id = c.track_id
+      ORDER BY c.course_id ASC
+      LIMIT 4
+    ";
+    $resFallback = $conn->query($sqlFallback);
+    if ($resFallback) {
+      while ($r = $resFallback->fetch_assoc()) {
+        $recommendedCourses[] = $r;
+      }
+    }
+    $recSubtitle = "General recommendations for your account until track preferences are available.";
+  }
+}
+
 $track = [];
 $resTracks = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM track ORDER BY track_id ASC");
 if ($resTracks && $resTracks->num_rows > 0) {
@@ -68,43 +217,90 @@ if ($resTracks && $resTracks->num_rows > 0) {
 ?>
 
 <div class="container mt-5">
-  <h1 class="text-center">Top Courses</h1>
-  <p class="text-center text-muted mb-4">One featured course from each track</p>
+  <?php if ($isStudentLoggedIn): ?>
+    <h1 class="text-center"><?php echo htmlspecialchars($recTitle); ?></h1>
+    <p class="text-center text-muted mb-4"><?php echo htmlspecialchars($recSubtitle); ?></p>
 
-  <div class="row mt-4">
-    <?php if (count($topCourses) > 0): ?>
-      <?php foreach ($topCourses as $row): ?>
-        <?php
-          $course_id = (int)$row['course_id'];
-          $img = str_replace('..', '.', (string)$row['course_img']);
-        ?>
-        <div class="col-sm-6 col-lg-3 mb-4">
-          <a href="coursedetails.php?course_id=<?php echo $course_id; ?>" class="btn" style="text-align:left; padding:0px; width:100%;">
-            <div class="card h-100">
-              <img src="<?php echo htmlspecialchars($img); ?>" class="card-img-top" alt="course" />
-              <div class="card-body">
-                <small class="text-muted"><?php echo htmlspecialchars($row['track_name']); ?></small>
-                <h5 class="card-title mt-2"><?php echo htmlspecialchars($row['course_name']); ?></h5>
-                <p class="card-text"><?php echo htmlspecialchars($row['course_desc']); ?></p>
+    <div class="row mt-4">
+      <?php if (count($recommendedCourses) > 0): ?>
+        <?php foreach ($recommendedCourses as $row): ?>
+          <?php
+            $course_id = (int)$row['course_id'];
+            $img = itv_index_img((string)($row['course_img'] ?? ''));
+          ?>
+          <div class="col-sm-6 col-lg-3 mb-4">
+            <a href="coursedetails.php?course_id=<?php echo $course_id; ?>" class="btn" style="text-align:left; padding:0px; width:100%;">
+              <div class="card h-100">
+                <?php if ($img !== ''): ?>
+                  <img src="<?php echo htmlspecialchars($img); ?>" class="card-img-top" alt="course" />
+                <?php endif; ?>
+                <div class="card-body">
+                  <div class="mb-2">
+                    <span class="badge badge-success">Recommended</span>
+                  </div>
+                  <small class="text-muted"><?php echo htmlspecialchars((string)($row['track_name'] ?? 'General')); ?></small>
+                  <h5 class="card-title mt-2"><?php echo htmlspecialchars($row['course_name']); ?></h5>
+                  <p class="card-text"><?php echo htmlspecialchars($row['course_desc']); ?></p>
+                </div>
+                <div class="card-footer">
+                  <p class="card-text d-inline">
+                    Price:
+                    <small><del>&#8377 <?php echo (float)$row['course_original_price']; ?></del></small>
+                    <span class="font-weight-bolder">&#8377 <?php echo (float)$row['course_price']; ?></span>
+                  </p>
+                  <a class="btn btn-primary text-white font-weight-bolder float-right" href="coursedetails.php?course_id=<?php echo $course_id; ?>">Enroll</a>
+                </div>
               </div>
-              <div class="card-footer">
-                <p class="card-text d-inline">
-                  Price:
-                  <small><del>&#8377 <?php echo (int)$row['course_original_price']; ?></del></small>
-                  <span class="font-weight-bolder">&#8377 <?php echo (int)$row['course_price']; ?></span>
-                </p>
-                <a class="btn btn-primary text-white font-weight-bolder float-right" href="coursedetails.php?course_id=<?php echo $course_id; ?>">Enroll</a>
-              </div>
-            </div>
-          </a>
+            </a>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="col-12">
+          <div class="alert alert-dark">No recommendations found.</div>
         </div>
-      <?php endforeach; ?>
-    <?php else: ?>
-      <div class="col-12">
-        <div class="alert alert-dark">No courses found.</div>
-      </div>
-    <?php endif; ?>
-  </div>
+      <?php endif; ?>
+    </div>
+  <?php else: ?>
+    <h1 class="text-center">Top Courses</h1>
+    <p class="text-center text-muted mb-4">One featured course from each track</p>
+
+    <div class="row mt-4">
+      <?php if (count($topCourses) > 0): ?>
+        <?php foreach ($topCourses as $row): ?>
+          <?php
+            $course_id = (int)$row['course_id'];
+            $img = itv_index_img((string)($row['course_img'] ?? ''));
+          ?>
+          <div class="col-sm-6 col-lg-3 mb-4">
+            <a href="coursedetails.php?course_id=<?php echo $course_id; ?>" class="btn" style="text-align:left; padding:0px; width:100%;">
+              <div class="card h-100">
+                <?php if ($img !== ''): ?>
+                  <img src="<?php echo htmlspecialchars($img); ?>" class="card-img-top" alt="course" />
+                <?php endif; ?>
+                <div class="card-body">
+                  <small class="text-muted"><?php echo htmlspecialchars($row['track_name']); ?></small>
+                  <h5 class="card-title mt-2"><?php echo htmlspecialchars($row['course_name']); ?></h5>
+                  <p class="card-text"><?php echo htmlspecialchars($row['course_desc']); ?></p>
+                </div>
+                <div class="card-footer">
+                  <p class="card-text d-inline">
+                    Price:
+                    <small><del>&#8377 <?php echo (float)$row['course_original_price']; ?></del></small>
+                    <span class="font-weight-bolder">&#8377 <?php echo (float)$row['course_price']; ?></span>
+                  </p>
+                  <a class="btn btn-primary text-white font-weight-bolder float-right" href="coursedetails.php?course_id=<?php echo $course_id; ?>">Enroll</a>
+                </div>
+              </div>
+            </a>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="col-12">
+          <div class="alert alert-dark">No courses found.</div>
+        </div>
+      <?php endif; ?>
+    </div>
+  <?php endif; ?>
 
   <div class="text-center m-2">
     <a class="btn btn-danger btn-sm" href="courses.php">Browse Tracks</a>

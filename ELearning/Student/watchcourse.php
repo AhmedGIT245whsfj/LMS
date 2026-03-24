@@ -92,6 +92,7 @@ if (!empty($lessons) && !empty($lessons[0]['lesson_link'])) {
   <link rel="stylesheet" href="../css/all.min.css">
   <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
   <link rel="stylesheet" href="../css/stustyle.css">
+  <link rel="stylesheet" type="text/css" href="../css/watchcourse-polish.css">
 </head>
 
 <body>

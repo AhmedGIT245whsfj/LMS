@@ -8,7 +8,7 @@
     <script type="text/javascript" src="../js/all.min.js"></script>
 
     <!-- Ajax Call JavaScript -->
-    <!-- <script type="text/javascript" src="..js/ajaxrequest.js"></script> -->
+    <!-- <script type="text/javascript" src="..js/ajaxrequest.js?v=20260323signupfix"></script> -->
 
     <!-- Custom JavaScript -->
     <script type="text/javascript" src="../js/custom.js"></script>

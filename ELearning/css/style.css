@@ -141,3 +141,657 @@ a.social-hover:hover {
     background: #343a40 url("../image/bgmobile.jpg") center center / cover no-repeat;
   }
 }
+
+/* =========================
+   ITVERSE Professional Navbar
+   ========================= */
+body {
+  padding-top: 92px;
+}
+
+.itv-navbar {
+  background: linear-gradient(135deg, rgba(7, 12, 22, 0.92), rgba(13, 27, 42, 0.90));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 14px 0;
+  transition: all 0.25s ease;
+}
+
+.itv-nav-wrap {
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+.itv-brand {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none !important;
+  line-height: 1.05;
+  margin-right: 28px;
+}
+
+.itv-brand-main {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.itv-brand-sub {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.92rem;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.itv-brand:hover .itv-brand-main,
+.itv-brand:hover .itv-brand-sub {
+  color: #ffffff;
+}
+
+.itv-nav-list {
+  gap: 8px;
+}
+
+.itv-nav-link {
+  position: relative;
+  color: rgba(245, 247, 250, 0.96) !important;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 10px 16px !important;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+}
+
+.itv-nav-link:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.itv-nav-link.active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.itv-nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 999px;
+  background: #7dd3fc;
+}
+
+.itv-nav-btn-wrap {
+  margin-left: 6px;
+}
+
+.itv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 108px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 10px 18px !important;
+  text-decoration: none !important;
+  transition: all 0.25s ease;
+}
+
+.itv-btn:hover {
+  transform: translateY(-1px);
+}
+
+.itv-btn-primary {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #00b4d8, #2563eb);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
+}
+
+.itv-btn-primary:hover {
+  color: #ffffff !important;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.34);
+}
+
+.itv-btn-outline {
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.itv-btn-outline:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.itv-toggler {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  border-radius: 12px;
+  padding: 6px 10px;
+}
+
+.itv-toggler:focus,
+.itv-toggler:active {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 991.98px) {
+  body {
+    padding-top: 88px;
+  }
+
+  .itv-nav-wrap {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .itv-brand-main {
+    font-size: 1.65rem;
+  }
+
+  .itv-brand-sub {
+    font-size: 0.82rem;
+  }
+
+  .itv-nav-list {
+    gap: 2px;
+    margin-top: 16px;
+    padding: 14px 10px 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+  }
+
+  .itv-nav-link,
+  .itv-btn {
+    width: 100%;
+  }
+
+  .itv-nav-btn-wrap {
+    margin-left: 0;
+  }
+}
+
+
+.itv-navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+.itv-navbar .container-fluid {
+  position: relative;
+  z-index: 1;
+}
+
+.itv-brand-main {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.itv-brand-sub,
+.itv-nav-link,
+.itv-btn {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
+}
+
+/* ===== HERO BACKGROUND PROFESSIONAL ===== */
+.itv-hero {
+  height: 320px;
+  width: 100%;
+  background:
+    linear-gradient(rgba(10,20,30,0.6), rgba(10,20,30,0.6)),
+    url("../image/TRACKIMAGES/standardbackground.webp") center/cover no-repeat;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+@media (max-width: 768px) {
+  .itv-hero {
+    height: 220px;
+  }
+}
+
+
+
+/* ===== ITVERSE SAFE NAV GLOW ===== */
+body{
+  font-family: 'Inter', sans-serif;
+}
+
+.itv-navbar{
+  background:
+    linear-gradient(90deg, rgba(12,18,30,0.96), rgba(23,37,59,0.94), rgba(15,23,42,0.96)) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+.itv-nav-wrap{
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.itv-brand{
+  text-decoration: none !important;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.itv-brand-main{
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em;
+  color: #ffffff !important;
+  line-height: 1;
+  text-shadow:
+    0 0 10px rgba(56,189,248,0.16),
+    0 0 24px rgba(37,99,235,0.12);
+  transition: transform .22s ease, text-shadow .22s ease;
+}
+
+.itv-brand:hover .itv-brand-main{
+  transform: translateY(-1px) scale(1.01);
+  text-shadow:
+    0 0 14px rgba(56,189,248,0.24),
+    0 0 30px rgba(37,99,235,0.18);
+}
+
+.itv-brand-sub{
+  font-size: 0.82rem !important;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.72) !important;
+  margin-top: 6px;
+}
+
+.itv-nav-list{
+  gap: 4px;
+}
+
+.itv-nav-link{
+  color: rgba(255,255,255,0.88) !important;
+  font-weight: 500;
+  padding: 11px 15px !important;
+  border-radius: 12px;
+  transition: all .22s ease;
+}
+
+.itv-nav-link:hover{
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.07) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.itv-nav-link.active{
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.09) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.08),
+    0 0 0 1px rgba(56,189,248,0.06);
+}
+
+.itv-btn-outline{
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  background: rgba(255,255,255,0.03) !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  transition: all .22s ease;
+}
+
+.itv-btn-outline:hover{
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.28) !important;
+}
+
+.itv-btn-primary{
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  box-shadow: 0 10px 22px rgba(37,99,235,0.22);
+}
+
+.itv-btn-primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(37,99,235,0.28);
+}
+
+@media (max-width: 991px){
+  .itv-brand-main{
+    font-size: 1.65rem !important;
+  }
+
+  .itv-brand-sub{
+    font-size: 0.74rem !important;
+  }
+
+  .itv-nav-link{
+    padding: 10px 12px !important;
+  }
+}
+
+
+
+/* ===== ITVERSE REAL HEADER POLISH ===== */
+.itv-main-nav{
+  background:
+    linear-gradient(90deg, rgba(17,24,39,0.97), rgba(30,41,59,0.95), rgba(15,23,42,0.97)) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  transition: all .25s ease;
+}
+
+.itv-main-nav .navbar-brand.itv-logo{
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em;
+  color: #ffffff !important;
+  line-height: 1;
+  margin-right: 14px;
+  text-shadow:
+    0 0 10px rgba(56,189,248,0.16),
+    0 0 22px rgba(37,99,235,0.12);
+  transition: transform .22s ease, text-shadow .22s ease;
+}
+
+.itv-main-nav .navbar-brand.itv-logo:hover{
+  transform: translateY(-1px) scale(1.01);
+  text-shadow:
+    0 0 14px rgba(56,189,248,0.24),
+    0 0 30px rgba(37,99,235,0.18);
+}
+
+.itv-main-nav .itv-tagline{
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 500;
+  color: rgba(255,255,255,0.70) !important;
+  letter-spacing: 0.02em;
+  margin-right: 22px;
+}
+
+.itv-main-nav .custom-nav{
+  gap: 4px;
+}
+
+.itv-main-nav .itv-nav-item{
+  margin-right: 2px;
+}
+
+.itv-main-nav .itv-nav-link{
+  font-family: 'Inter', sans-serif !important;
+  color: rgba(255,255,255,0.88) !important;
+  font-size: 1.02rem;
+  font-weight: 500;
+  padding: 10px 14px !important;
+  border-radius: 12px;
+  transition: all .22s ease;
+}
+
+.itv-main-nav .itv-nav-link:hover{
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.07) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.itv-main-nav .navbar-toggler{
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+.itv-main-nav .navbar-toggler:focus{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 991px){
+  .itv-main-nav{
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .itv-main-nav .navbar-brand.itv-logo{
+    font-size: 1.6rem !important;
+    margin-right: 10px;
+  }
+
+  .itv-main-nav .itv-tagline{
+    font-size: 0.80rem !important;
+    display: inline-block;
+    max-width: 140px;
+    white-space: normal;
+    line-height: 1.2;
+  }
+
+  .itv-main-nav .custom-nav{
+    padding-top: 12px;
+    padding-left: 0 !important;
+  }
+
+  .itv-main-nav .itv-nav-link{
+    padding: 10px 12px !important;
+  }
+}
+
+
+
+/* ===== ITVERSE COURSE CARD HEIGHT FIX ===== */
+.card{
+  height: 100%;
+}
+
+.card img,
+.card .card-img-top{
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-body{
+  min-height: 235px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body .card-title{
+  min-height: 72px;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.card-body .card-text{
+  min-height: 72px;
+  line-height: 1.45;
+}
+
+.card-footer{
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 66px;
+}
+
+.card-footer .btn,
+.card-footer .btn-primary{
+  white-space: nowrap;
+}
+
+@media (max-width: 768px){
+  .card img,
+  .card .card-img-top{
+    height: 170px;
+  }
+
+  .card-body{
+    min-height: 210px;
+  }
+
+  .card-body .card-title,
+  .card-body .card-text{
+    min-height: auto;
+  }
+}
+
+
+
+/* ===== FIX HERO BUTTON + RED STRIP ===== */
+
+/* زرار Get Started */
+.btn-danger,
+button.btn-danger,
+a.btn-danger {
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #0284c7, #1d4ed8) !important;
+  transform: translateY(-1px);
+}
+
+/* الشريط الأحمر */
+.d-flex.justify-content-between.bg-danger,
+.bg-danger.py-2,
+.bg-danger {
+  background: linear-gradient(90deg, #0f172a, #1e293b) !important;
+  padding: 6px 0 !important;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+
+
+
+/* ===== FIX CONTACT CARD (RED → BLUE) ===== */
+
+.bg-danger,
+.contact,
+.contact-card,
+footer .bg-danger {
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  color: #fff !important;
+  box-shadow: 0 20px 40px rgba(37,99,235,0.3);
+}
+
+/* تحسين الشكل */
+.contact h1,
+.contact h2,
+.contact h3 {
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.contact p {
+  opacity: 0.9;
+  font-size: 15px;
+}
+
+
+
+
+/* ===== ITVERSE FINAL BLUE THEME ===== */
+
+/* أي شريط فاتح/أزرق سماوي */
+.bg-info,
+.bg-primary,
+.bg-primary.py-2,
+.bg-info.py-2,
+.d-flex.justify-content-between.bg-primary,
+.d-flex.justify-content-between.bg-info,
+.d-flex.justify-content-between.bg-danger,
+.bg-danger.py-2,
+.bg-danger.py-3,
+.strip-banner,
+.txt-banner,
+.itv-benefits-bar,
+.social-banner,
+.social-strip,
+.social-nav,
+.footer-social,
+.info-strip {
+  background: linear-gradient(90deg, #0f172a, #1e293b) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  box-shadow: 0 8px 22px rgba(15,23,42,0.14);
+}
+
+/* النصوص والأيقونات جوه الأشرطة */
+.bg-info *,
+.bg-primary *,
+.bg-danger *,
+.itv-benefits-bar *,
+.social-banner *,
+.social-strip *,
+.footer-social * {
+  color: #ffffff !important;
+}
+
+/* الكارت الأحمر المايل */
+.bg-danger,
+.contact,
+.contact-card,
+footer .bg-danger,
+#contact .bg-danger,
+#Contact .bg-danger,
+.card.bg-danger,
+.contact-us .bg-danger {
+  background: linear-gradient(135deg, #0f172a, #1e3a5f) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  box-shadow: 0 22px 42px rgba(15,23,42,0.22) !important;
+}
+
+/* تحسين النص داخل الكارت */
+.contact h1,
+.contact h2,
+.contact h3,
+.contact-card h1,
+.contact-card h2,
+.contact-card h3,
+.bg-danger h1,
+.bg-danger h2,
+.bg-danger h3 {
+  color: #ffffff !important;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.contact p,
+.contact-card p,
+.bg-danger p,
+.bg-danger span {
+  color: rgba(255,255,255,0.92) !important;
+}
+
+/* لو فيه لينكات سوشيال أو عناصر داخل الشرائط */
+.social-strip a,
+.footer-social a,
+.itv-benefits-bar a,
+.bg-primary a,
+.bg-info a,
+.bg-danger a {
+  color: #ffffff !important;
+  opacity: 0.96;
+}
+
+.social-strip a:hover,
+.footer-social a:hover,
+.itv-benefits-bar a:hover,
+.bg-primary a:hover,
+.bg-info a:hover,
+.bg-danger a:hover {
+  opacity: 1;
+}

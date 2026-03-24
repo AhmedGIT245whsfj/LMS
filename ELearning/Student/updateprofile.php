@@ -2,6 +2,113 @@
 session_start();
 require_once __DIR__ . '/../dbConnection.php';
 
+/* ITV_PROFILE_IMAGE_FIX */
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+function itv_pick_student_identifier(): array {
+    $sid = $_POST['stu_id'] ?? $_POST['sid'] ?? $_POST['student_id'] ?? null;
+    $email = $_POST['stuemail'] ?? $_POST['stu_email'] ?? $_POST['email'] ?? ($_SESSION['stuLogEmail'] ?? null);
+    return [$sid, $email];
+}
+
+function itv_detect_student_image_column(mysqli $conn): ?string {
+    $result = $conn->query("SHOW COLUMNS FROM student");
+    if (!$result) return null;
+
+    $preferred = ['stu_img', 'stu_image', 'stuimage', 'student_img', 'image', 'img'];
+    $cols = [];
+    while ($row = $result->fetch_assoc()) {
+        $cols[] = $row['Field'];
+    }
+    foreach ($preferred as $p) {
+        if (in_array($p, $cols, true)) return $p;
+    }
+    return null;
+}
+
+function itv_handle_profile_upload(mysqli $conn): void {
+    if (!isset($_FILES['stuImg'])) {
+        return;
+    }
+
+    if (!is_array($_FILES['stuImg']) || (int)($_FILES['stuImg']['error'] ?? 4) === 4) {
+        return;
+    }
+
+    $file = $_FILES['stuImg'];
+
+    if ((int)$file['error'] !== 0) {
+        return;
+    }
+
+    $tmp = $file['tmp_name'] ?? '';
+    if ($tmp === '' || !is_uploaded_file($tmp)) {
+        return;
+    }
+
+    $ext = strtolower(pathinfo($file['name'] ?? '', PATHINFO_EXTENSION));
+    $allowed = ['jpg','jpeg','png','webp'];
+    if (!in_array($ext, $allowed, true)) {
+        $_SESSION['profile_msg'] = "Only JPG, JPEG, PNG, WEBP are allowed.";
+        return;
+    }
+
+    if ((int)($file['size'] ?? 0) > 4 * 1024 * 1024) {
+        $_SESSION['profile_msg'] = "Image too large. Max 4MB.";
+        return;
+    }
+
+    [$sid, $email] = itv_pick_student_identifier();
+    $column = itv_detect_student_image_column($conn);
+    if ($column === null) {
+        $_SESSION['profile_msg'] = "Image column not found in student table.";
+        return;
+    }
+
+    $baseDir = dirname(__DIR__) . '/image/stu';
+    if (!is_dir($baseDir)) {
+        @mkdir($baseDir, 0775, true);
+    }
+
+    $safeId = $sid ? preg_replace('/[^0-9a-zA-Z_-]/', '', (string)$sid) : 'student';
+    $filename = 'stu_' . $safeId . '_' . time() . '.' . $ext;
+    $destFs = $baseDir . '/' . $filename;
+
+    if (!@move_uploaded_file($tmp, $destFs)) {
+        $_SESSION['profile_msg'] = "Failed to save uploaded image.";
+        return;
+    }
+
+    if ($sid) {
+        $stmt = $conn->prepare("UPDATE student SET `$column`=? WHERE stu_id=?");
+        if ($stmt) {
+            $sid_int = (int)$sid;
+            $stmt->bind_param("si", $filename, $sid_int);
+            $stmt->execute();
+            $stmt->close();
+            $_SESSION['profile_msg'] = "Profile updated successfully.";
+            return;
+        }
+    }
+
+    if ($email) {
+        $stmt = $conn->prepare("UPDATE student SET `$column`=? WHERE stu_email=?");
+        if ($stmt) {
+            $stmt->bind_param("ss", $filename, $email);
+            $stmt->execute();
+            $stmt->close();
+            $_SESSION['profile_msg'] = "Profile updated successfully.";
+            return;
+        }
+    }
+}
+
+
+itv_handle_profile_upload($conn);
+
+
 if (empty($_SESSION['is_login']) || empty($_SESSION['stu_id']) || empty($_SESSION['stuLogEmail'])) {
   header("Location: ../loginorsignup.php");
   exit;

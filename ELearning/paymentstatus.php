@@ -36,8 +36,7 @@ require_once __DIR__ . '/mainInclude/header.php';
 ?>  
 <div class="container-fluid bg-dark">
   <div class="row">
-    <img src="./image/coursebanner.jpg" alt="courses" style="height:300px; width:100%; object-fit:cover; box-shadow:10px;"/>
-  </div> 
+    </div> 
 </div>
 
 <div class="container">

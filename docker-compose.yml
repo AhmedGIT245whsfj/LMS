@@ -25,27 +25,12 @@ services:
     container_name: itverse-web
     ports:
       - "8090:80"
-    volumes:
-      - ./ELearning:/var/www/html
     environment:
       DB_HOST: db
+      DB_PORT: 3306
       DB_NAME: lms_db
       DB_USER: itverse
       DB_PASS: itverse123
-    depends_on:
-      db:
-        condition: service_healthy
-
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: itverse-phpmyadmin
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: itverse
-      PMA_PASSWORD: itverse123
-    ports:
-      - "8091:80"
     depends_on:
       db:
         condition: service_healthy

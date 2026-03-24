@@ -10,7 +10,6 @@ if ($__cid !== '') { $_SESSION['last_course_id_viewed'] = $__cid; }
 ?>  
     <div class="container-fluid bg-dark"> <!-- Start Course Page Banner -->
       <div class="row">
-        <img src="./image/coursebanner.jpg" alt="courses" style="height:200px; width:100%; object-fit:cover; box-shadow:10px;"/>
       </div> 
     </div> <!-- End Course Page Banner -->
 

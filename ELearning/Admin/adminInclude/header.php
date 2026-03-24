@@ -34,7 +34,7 @@ echo TITLE; ?></title>
       </li>
 
       <li class="nav-item">
-       <a class="nav-link <?php if(PAGE == 'track') {echo 'active';} ?>" href="track.php">
+       <a class="nav-link <?php if(PAGE == 'track') {echo 'active';} ?>" href="tracks.php">
         <i class="fas fa-layer-group"></i>
         Tracks
        </a>

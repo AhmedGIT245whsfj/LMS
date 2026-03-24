@@ -195,7 +195,7 @@ $img = (string)($row['track_img'] ?? '');
 
     <div class="text-center">
       <button type="submit" class="btn btn-danger" id="requpdate" name="requpdate">Update</button>
-      <a href="track.php" class="btn btn-secondary">Close</a>
+      <a href="tracks.php" class="btn btn-secondary">Close</a>
     </div>
 
     <?php if ($msg) { echo $msg; } ?>

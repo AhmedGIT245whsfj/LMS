@@ -1,0 +1,145 @@
+
+/* ===== ITVERSE WATCHCOURSE POLISH ===== */
+body{
+  background: #f4f7fb !important;
+}
+
+/* kill ugly old green strip if present */
+body > .container-fluid:first-of-type,
+body > .jumbotron:first-of-type,
+body > .bg-success:first-of-type,
+body > div[style*="green"]:first-of-type{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* layout breathing */
+.container-fluid{
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+.container-fluid > .row{
+  gap: 0 !important;
+}
+
+/* left lessons panel */
+.container-fluid .col-sm-3,
+.container-fluid .col-md-3,
+.container-fluid .col-lg-3{
+  background: transparent !important;
+}
+
+.container-fluid .col-sm-3 > *:first-child,
+.container-fluid .col-md-3 > *:first-child,
+.container-fluid .col-lg-3 > *:first-child{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,0.08) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 38px rgba(15,23,42,0.08) !important;
+  overflow: hidden !important;
+}
+
+/* lessons title */
+h3, h4{
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+/* lesson items */
+.list-group-item,
+.list-group-item-action,
+.list-group a,
+.list-group button{
+  border: 0 !important;
+  border-bottom: 1px solid rgba(15,23,42,0.06) !important;
+  padding: 15px 18px !important;
+  font-weight: 500 !important;
+  color: #334155 !important;
+  background: #fff !important;
+  transition: all .2s ease;
+}
+
+.list-group-item:hover,
+.list-group-item-action:hover,
+.list-group a:hover,
+.list-group button:hover{
+  background: #eff6ff !important;
+  color: #0f172a !important;
+  padding-left: 22px !important;
+}
+
+.list-group-item.active,
+.list-group-item-action.active,
+.list-group a.active,
+.list-group button.active{
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* right video area */
+.container-fluid .col-sm-9,
+.container-fluid .col-md-9,
+.container-fluid .col-lg-9{
+  padding-left: 22px !important;
+}
+
+.container-fluid .col-sm-9 > *:first-child,
+.container-fluid .col-md-9 > *:first-child,
+.container-fluid .col-lg-9 > *:first-child{
+  background: #ffffff !important;
+  border: 1px solid rgba(15,23,42,0.08) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 22px 45px rgba(15,23,42,0.08) !important;
+  padding: 22px !important;
+}
+
+/* video */
+video{
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 420px;
+  background: #0f172a !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 40px rgba(15,23,42,0.20) !important;
+  display: block;
+}
+
+/* back/my courses button */
+.btn,
+a.btn{
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  padding: 10px 18px !important;
+}
+
+.btn-danger{
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  border: 0 !important;
+  box-shadow: 0 12px 24px rgba(220,38,38,0.18) !important;
+}
+
+/* generic cleanup for random headings/text */
+p, span, li, a, button{
+  letter-spacing: 0 !important;
+}
+
+@media (max-width: 991px){
+  .container-fluid{
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .container-fluid .col-sm-9,
+  .container-fluid .col-md-9,
+  .container-fluid .col-lg-9{
+    padding-left: 0 !important;
+    margin-top: 18px !important;
+  }
+
+  video{
+    min-height: 240px;
+  }
+}
