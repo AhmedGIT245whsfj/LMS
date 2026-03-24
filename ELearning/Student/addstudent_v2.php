@@ -144,17 +144,25 @@ if ($hash === false) {
 $stu_occ = $experience;
 $stu_img = '';
 
-$sql = "INSERT INTO student
-        (stu_name, stu_email, stu_pass, stu_occ, stu_img, preferred_track_id, experience_level)
-        VALUES (?, ?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare("
+  INSERT INTO student 
+  (stu_name, stu_email, stu_pass, preferred_track, experience_level, preferred_track_id)
+  VALUES (?, ?, ?, ?, ?, ?)
+");
 
-$stmt = $conn->prepare($sql);
-if (!$stmt) {
-    http_response_code(500);
-    exit('0');
-}
+$track     = $_POST["track"] ?? "";
+$level     = $_POST["level"] ?? "";
+$track_id  = (int)($_POST["track_id"] ?? 0);
 
 $stmt->bind_param(
+  "sssssi",
+  $name,
+  $email,
+  $password,
+  $track,
+  $level,
+  $track_id
+);
     "sssssis",
     $name,
     $email,
