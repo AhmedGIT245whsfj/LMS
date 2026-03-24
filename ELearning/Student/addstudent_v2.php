@@ -163,15 +163,6 @@ $stmt->bind_param(
   $level,
   $track_id
 );
-    "sssssis",
-    $name,
-    $email,
-    $hash,
-    $stu_occ,
-    $stu_img,
-    $trackId,
-    $experience
-);
 
 if (!$stmt->execute()) {
     http_response_code(500);
