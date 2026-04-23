@@ -54,7 +54,7 @@ include('./mainInclude/header.php');
           <select class="form-control" id="preferred_track" name="preferred_track">
             <option value="Programming">Programming</option>
             <option value="Networking">Networking</option>
-            <option value="Artificial Intelligence">Artificial Intelligence</option>
+            <option value="AI">Artificial Intelligence</option>
             <option value="Cyber Security">Cyber Security</option>
             <option value="DevOps">DevOps</option>
             <option value="Data Science">Data Science</option>
@@ -86,58 +86,3 @@ include('./mainInclude/header.php');
 <?php
 include('./mainInclude/footer.php');
 ?>
-
-<script src="js/jquery.min.js"></script>
-<script>
-  (function () {
-    var ok = (typeof window.addStu === 'function');
-    if (!ok) {
-      var el = document.getElementById('jsHealth');
-      if (el) el.textContent = 'JS not loaded: addStu() is missing. Check js/ajaxrequest.js?v=20260323signupfix.';
-      if (console && console.log) console.log('addStu is missing. ajaxrequest.js not loaded or has errors.');
-    }
-  })();
-</script>
-
-
-<script>
-window.addEventListener('load', function(){
-  var el = document.getElementById('successMsg');
-  if (!el) return;
-  if (typeof window.addStu !== 'function') {
-    el.innerHTML = '<span style="color:red;">JS not loaded: addStu() missing. Hard refresh (Ctrl+F5).</span>';
-  }
-});
-</script>
-
-
-<script src="js/ajaxrequest_v2.js?v=1772447694"></script>
-
-
-<script>
-(function() {
-  // Fallback submit if AJAX fails (no breaking changes)
-  window.__itverseFallbackSignup = function(payload) {
-    try {
-      var form = document.createElement('form');
-      form.method = 'POST';
-      form.action = '/Student/addstudent_v2.php';
-      var add = function(k,v) {
-        var i = document.createElement('input');
-        i.type='hidden'; i.name=k; i.value=v;
-        form.appendChild(i);
-      };
-      add('stusignup', '1');
-      add('stuname', payload.stuname || '');
-      add('stuemail', payload.stuemail || '');
-      add('stupass', payload.stupass || '');
-      add('preferred_track_id', payload.preferred_track_id || '');
-      add('experience_level', payload.experience_level || '');
-      document.body.appendChild(form);
-      form.submit();
-    } catch(e) {
-      console.log('Fallback submit failed:', e);
-    }
-  };
-})();
-</script>

@@ -52,6 +52,25 @@ if (isset($_POST['delete']) && isset($_POST['id'])) {
 }
 
 $result = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM track ORDER BY track_id ASC");
+if (!function_exists('itv_admin_track_img')) {
+  function itv_admin_track_img(string $img): string {
+    $img = trim($img);
+    if ($img === '') {
+      return '../image/TRACKIMAGES/standardbackground.webp';
+    }
+    if (preg_match('#^https?://#i', $img)) {
+      return $img;
+    }
+    if (str_starts_with($img, '../') || str_starts_with($img, '/')) {
+      return str_replace('#', '%23', $img);
+    }
+    if (str_starts_with($img, 'image/')) {
+      return str_replace('#', '%23', '../' . $img);
+    }
+    return str_replace('#', '%23', '../image/TRACKIMAGES/' . ltrim($img, '/'));
+  }
+}
+
 ?>
 <div class="col-sm-9 mt-5">
   <p class="bg-dark text-white p-2">List of Tracks</p>
@@ -68,7 +87,7 @@ $result = $conn->query("SELECT track_id, track_name, track_desc, track_img FROM 
       </thead>
       <tbody>
         <?php while ($row = $result->fetch_assoc()): ?>
-          <?php $img = (string)($row['track_img'] ?? ''); ?>
+          <?php $img = itv_admin_track_img((string)($row['track_img'] ?? '')); ?>
           <tr>
             <th scope="row"><?php echo (int)$row['track_id']; ?></th>
             <td>

@@ -157,7 +157,26 @@ if (!$row) {
   exit;
 }
 
-$img = (string)($row['track_img'] ?? '');
+$img = itv_admin_track_img((string)($row['track_img'] ?? ''));
+if (!function_exists('itv_admin_track_img')) {
+  function itv_admin_track_img(string $img): string {
+    $img = trim($img);
+    if ($img === '') {
+      return '../image/TRACKIMAGES/standardbackground.webp';
+    }
+    if (preg_match('#^https?://#i', $img)) {
+      return $img;
+    }
+    if (str_starts_with($img, '../') || str_starts_with($img, '/')) {
+      return str_replace('#', '%23', $img);
+    }
+    if (str_starts_with($img, 'image/')) {
+      return str_replace('#', '%23', '../' . $img);
+    }
+    return str_replace('#', '%23', '../image/TRACKIMAGES/' . ltrim($img, '/'));
+  }
+}
+
 ?>
 <div class="col-sm-7 mt-5 mx-3 jumbotron">
   <h3 class="text-center">Update Track Details</h3>

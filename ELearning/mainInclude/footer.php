@@ -111,7 +111,7 @@ include(__DIR__ . "/studentRegistration.php"); }} ?>
     <script type="text/javascript" src="js/testyslider.js"></script>
 
     <!-- Student Ajax Call JavaScript -->
-    <script type="text/javascript" src="js/ajaxrequest.js?v=20260323signupfix"></script>
+    <script type="text/javascript" src="js/ajaxrequest.js?v=1776946578"></script>
 
     <!-- Admin Ajax Call JavaScript -->
     <script type="text/javascript" src="js/adminajaxrequest.js"></script>
